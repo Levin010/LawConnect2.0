@@ -1,4 +1,4 @@
-package com.lawconnect.server.model;
+package com.lawconnect.server.dto;
 
 import lombok.Data;
 

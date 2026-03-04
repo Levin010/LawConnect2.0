@@ -1,7 +1,7 @@
 package com.lawconnect.server.service;
 
 import com.lawconnect.server.model.User;
-import com.lawconnect.server.model.UserDto;
+import com.lawconnect.server.dto.UserDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;

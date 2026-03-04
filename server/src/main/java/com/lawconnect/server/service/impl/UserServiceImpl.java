@@ -1,7 +1,7 @@
 package com.lawconnect.server.service.impl;
 
 import com.lawconnect.server.model.User;
-import com.lawconnect.server.model.UserDto;
+import com.lawconnect.server.dto.UserDto;
 import com.lawconnect.server.repository.UserRepository;
 import com.lawconnect.server.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,11 +1,12 @@
 package com.lawconnect.server.controller;
 
 import com.lawconnect.server.config.TokenProvider;
-import com.lawconnect.server.model.AuthToken;
-import com.lawconnect.server.model.LoginUser;
+import com.lawconnect.server.dto.AuthToken;
+import com.lawconnect.server.dto.LoginUser;
 import com.lawconnect.server.model.User;
-import com.lawconnect.server.model.UserDto;
+import com.lawconnect.server.dto.UserDto;
 import com.lawconnect.server.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,7 +47,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> saveUser(@RequestBody UserDto user) {
+    public ResponseEntity<User> saveUser(@Valid @RequestBody UserDto user) {
         return ResponseEntity.ok(userService.save(user));
     }
 
