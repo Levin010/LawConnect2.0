@@ -23,10 +23,10 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column
+    @Column(nullable = false, unique = true)
     private String phone;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
     @Enumerated(EnumType.STRING)
