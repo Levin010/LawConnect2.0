@@ -1,3 +1,32 @@
 spring:
   application:
     name: server
+  datasource:
+    url: jdbc:postgresql://ep-icy-surf-al2y2h68-pooler.c-3.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+    username: neondb_owner
+    password: npg_5I4cYiBQsPWl
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+jwt:
+  token:
+    validity: 18000
+    prefix: Bearer
+  signing:
+    key: K24DCFRVbivUOKXUcVpKJn9zTNT0Mm/kKiuGw8jywOg=
+  authorities:
+    key: roles
+  header:
+    string: Authorization
+
+server:
+  port: 8080
+
+#logging:
+#  level:
+#    com.lawconnect: DEBUG
