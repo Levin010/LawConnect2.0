@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useRegisterMutation } from '@/store/api/authApi';
 
 type Role = 'CLIENT' | 'ADVOCATE';
@@ -70,6 +71,7 @@ function validateForm(data: FormData): FormErrors {
 }
 
 export default function SignupForm() {
+  const router = useRouter();
   const [register, { isLoading }] = useRegisterMutation();
   const [role, setRole] = useState<Role>('CLIENT');
   const [formData, setFormData] = useState<FormData>(emptyForm);
@@ -113,6 +115,7 @@ export default function SignupForm() {
 
       setSuccessMessage('Account created successfully! You can now log in.');
       setFormData(emptyForm);
+      // router.push('/login');
     } catch (err: unknown) {
       const error = err as { data?: { message?: string; errors?: Record<string, string> } };
       if (error?.data?.errors) {
