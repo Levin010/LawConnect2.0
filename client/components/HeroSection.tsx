@@ -26,19 +26,11 @@ export default function HeroSection() {
         </p>
         <Link
           href="/signup"
-          className="inline-block px-6 py-3 font-semibold text-white rounded transition-colors"
+          className="inline-block px-6 py-3 font-semibold text-white rounded transition-colors hover:brightness-75"
           style={{
             backgroundColor: '#8B0000',
             fontFamily: 'Georgia, serif',
           }}
-          onMouseEnter={(e) =>
-            ((e.currentTarget as HTMLAnchorElement).style.backgroundColor =
-              '#6B0000')
-          }
-          onMouseLeave={(e) =>
-            ((e.currentTarget as HTMLAnchorElement).style.backgroundColor =
-              '#8B0000')
-          }
         >
           Get Started
         </Link>

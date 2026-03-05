@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const categories = [
   'General Practice',
@@ -13,22 +13,23 @@ const categories = [
   'Entertainment Law',
 ];
 
-const VISIBLE_COUNT = 3;
-
 export default function Categories() {
   const [startIndex, setStartIndex] = useState(0);
+  const [visibleCount, setVisibleCount] = useState(3);
 
-  const maxIndex = categories.length - VISIBLE_COUNT;
+  useEffect(() => {
+    const update = () => setVisibleCount(window.innerWidth < 768 ? 1 : 3);
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
 
-  const handlePrev = () => {
-    setStartIndex((prev) => Math.max(prev - 1, 0));
-  };
+  const maxIndex = categories.length - visibleCount;
 
-  const handleNext = () => {
-    setStartIndex((prev) => Math.min(prev + 1, maxIndex));
-  };
+  const handlePrev = () => setStartIndex((prev) => Math.max(prev - 1, 0));
+  const handleNext = () => setStartIndex((prev) => Math.min(prev + 1, maxIndex));
 
-  const visible = categories.slice(startIndex, startIndex + VISIBLE_COUNT);
+  const visible = categories.slice(startIndex, startIndex + visibleCount);
 
   return (
     <section className="py-16 px-6 bg-white">
