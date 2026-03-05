@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import Navbar from '@/components/Navbar';
+import StoreProvider from '@/components/providers/StoreProvider';
 
 export const metadata: Metadata = {
   title: 'LawConnect - Connect with Advocates',
@@ -15,8 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Navbar />
-        <main>{children}</main>
+        <StoreProvider>
+          <Navbar />
+          <main>{children}</main>
+        </StoreProvider>
       </body>
     </html>
   );

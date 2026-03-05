@@ -1,5 +1,6 @@
 package com.lawconnect.server.config;
 
+import com.lawconnect.server.repository.BlacklistedTokenRepository;
 import com.lawconnect.server.service.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
@@ -31,6 +32,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private TokenProvider jwtTokenUtil;
 
+    @Autowired
+    private BlacklistedTokenRepository blacklistedTokenRepository;
+
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
         String header = req.getHeader(HEADER_STRING);
@@ -54,6 +58,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (blacklistedTokenRepository.existsByToken(authToken)) {
+                chain.doFilter(req, res);
+                return;
+            }
+
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
             if (jwtTokenUtil.validateToken(authToken, userDetails)) {

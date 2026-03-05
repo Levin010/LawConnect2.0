@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRegisterMutation } from '@/store/api/authApi';
 
 type Role = 'CLIENT' | 'ADVOCATE';
 
@@ -35,13 +36,9 @@ const emptyForm: FormData = {
 function validateForm(data: FormData): FormErrors {
   const errors: FormErrors = {};
 
-  if (!data.name.trim()) {
-    errors.name = 'Name is required.';
-  }
+  if (!data.name.trim()) errors.name = 'Name is required.';
 
-  if (!data.phone.trim()) {
-    errors.phone = 'Phone is required.';
-  }
+  if (!data.phone.trim()) errors.phone = 'Phone is required.';
 
   if (!data.email.trim()) {
     errors.email = 'Email is required.';
@@ -73,10 +70,10 @@ function validateForm(data: FormData): FormErrors {
 }
 
 export default function SignupForm() {
+  const [register, { isLoading }] = useRegisterMutation();
   const [role, setRole] = useState<Role>('CLIENT');
   const [formData, setFormData] = useState<FormData>(emptyForm);
   const [errors, setErrors] = useState<FormErrors>({});
-  const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
   const handleTabChange = (newRole: Role) => {
@@ -89,7 +86,6 @@ export default function SignupForm() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear the error for this field on change
     setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
@@ -103,42 +99,27 @@ export default function SignupForm() {
       return;
     }
 
-    setIsLoading(true);
     setErrors({});
 
     try {
-      const payload = {
+      await register({
         name: formData.name,
         phone: formData.phone,
         email: formData.email,
         username: formData.username,
         password: formData.password,
         role,
-      };
-
-      const res = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => null);
-        // Surface backend field errors if returned, otherwise show general error
-        if (data?.errors) {
-          setErrors(data.errors);
-        } else {
-          setErrors({ general: data?.message || 'Sign up failed. Please try again.' });
-        }
-        return;
-      }
+      }).unwrap();
 
       setSuccessMessage('Account created successfully! You can now log in.');
       setFormData(emptyForm);
-    } catch {
-      setErrors({ general: 'Network error. Please try again.' });
-    } finally {
-      setIsLoading(false);
+    } catch (err: unknown) {
+      const error = err as { data?: { message?: string; errors?: Record<string, string> } };
+      if (error?.data?.errors) {
+        setErrors(error.data.errors);
+      } else {
+        setErrors({ general: error?.data?.message || 'Sign up failed. Please try again.' });
+      }
     }
   };
 
@@ -153,7 +134,6 @@ export default function SignupForm() {
 
   return (
     <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 md:p-10 shadow-2xl border border-white/20">
-      {/* Title */}
       <h1
         className="text-3xl md:text-4xl font-bold text-white text-center mb-6"
         style={{ fontFamily: 'Georgia, serif' }}
@@ -173,7 +153,7 @@ export default function SignupForm() {
               style={{
                 fontFamily: 'Georgia, serif',
                 backgroundColor: role === r ? '#8B0000' : 'transparent',
-                color: role === r ? '#fff' : '#fff',
+                color: '#fff',
               }}
             >
               {r.charAt(0) + r.slice(1).toLowerCase()}
@@ -182,21 +162,18 @@ export default function SignupForm() {
         </div>
       </div>
 
-      {/* Success message */}
       {successMessage && (
         <div className="mb-6 px-4 py-3 rounded-lg bg-green-500/20 border border-green-400 text-green-200 text-sm text-center">
           {successMessage}
         </div>
       )}
 
-      {/* General error */}
       {errors.general && (
         <div className="mb-6 px-4 py-3 rounded-lg bg-red-500/20 border border-red-400 text-red-200 text-sm text-center">
           {errors.general}
         </div>
       )}
 
-      {/* Form */}
       <form onSubmit={handleSubmit} noValidate className="space-y-5">
         {fields.map(({ name, label, type }) => (
           <div key={name}>
@@ -234,10 +211,7 @@ export default function SignupForm() {
           type="submit"
           disabled={isLoading}
           className="w-full py-3 mt-2 rounded-lg text-white font-bold text-base transition-colors disabled:opacity-60"
-          style={{
-            backgroundColor: '#8B0000',
-            fontFamily: 'Georgia, serif',
-          }}
+          style={{ backgroundColor: '#8B0000', fontFamily: 'Georgia, serif' }}
         >
           {isLoading ? 'Creating Account...' : `Sign Up as ${role.charAt(0) + role.slice(1).toLowerCase()}`}
         </button>
