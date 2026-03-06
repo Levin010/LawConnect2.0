@@ -4,6 +4,7 @@ import com.lawconnect.server.dto.AdvocateProfileUpdateRequest;
 import com.lawconnect.server.dto.ClientProfileDto;
 import com.lawconnect.server.model.ClientProfile;
 
+import java.util.List;
 import java.util.Map;
 
 public interface ProfileService {
@@ -11,4 +12,5 @@ public interface ProfileService {
     Map<String, Object> getAdvocateFullProfile(String username);
     ClientProfile saveOrUpdateClientProfile(String username, ClientProfileDto dto);
     ClientProfile getClientProfile(String username);
+    List<Map<String, Object>> getAllAdvocates();
 }

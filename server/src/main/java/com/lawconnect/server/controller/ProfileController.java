@@ -11,6 +11,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/profile")
@@ -33,6 +35,11 @@ public class ProfileController {
     @GetMapping("/advocate")
     public ResponseEntity<?> getAdvocateProfile(Principal principal) {
         return ResponseEntity.ok(profileService.getAdvocateFullProfile(principal.getName()));
+    }
+
+    @GetMapping("/advocates")
+    public ResponseEntity<List<Map<String, Object>>> getAllAdvocates() {
+        return ResponseEntity.ok(profileService.getAllAdvocates());
     }
 
     @PreAuthorize("hasRole('CLIENT')")

@@ -1,16 +1,5 @@
 import { baseApi } from './baseApi';
 
-export interface Advocate {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  category: string;
-  lawFirm: string;
-  county: string;
-  profilePhoto?: string;
-}
-
 export interface AdvocateSearchParams {
   search?: string;
   category?: string;
@@ -52,8 +41,8 @@ export interface AdvocateProfile {
 
 export const advocateApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAdvocates: builder.query<Advocate[], AdvocateSearchParams>({
-      query: (params) => ({url: '/advocates',params,
+    getAdvocates: builder.query<AdvocateProfile[], AdvocateSearchParams>({
+      query: (params) => ({url: '/profile/advocates',params,
       }),
     }),
     getAdvocateDashboardStats: builder.query<DashboardStats, void>({

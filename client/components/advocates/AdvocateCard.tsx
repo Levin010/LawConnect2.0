@@ -1,8 +1,8 @@
 import Image from 'next/image';
-import { Advocate } from '@/store/api/advocateApi';
+import { AdvocateProfile } from '@/store/api/advocateApi';
 
 interface Props {
-  advocate: Advocate;
+  advocate: AdvocateProfile;
 }
 
 export default function AdvocateCard({ advocate }: Props) {
@@ -14,9 +14,9 @@ export default function AdvocateCard({ advocate }: Props) {
         style={{ backgroundColor: '#8B0000' }}
       >
         <div className="w-24 h-24 rounded-full overflow-hidden bg-white border-4 border-white/30 mb-4 flex items-center justify-center">
-          {advocate.profilePhoto ? (
+          {advocate.profilePicture ? (
             <Image
-              src={advocate.profilePhoto}
+              src={advocate.profilePicture}
               alt={advocate.name}
               width={96}
               height={96}

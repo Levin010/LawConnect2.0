@@ -116,7 +116,7 @@ export default function AdvocateSearch() {
       {!isLoading && !isError && advocates && advocates.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {advocates.map((advocate) => (
-            <AdvocateCard key={advocate.id} advocate={advocate} />
+            <AdvocateCard key={advocate.username} advocate={advocate} />
           ))}
         </div>
       )}

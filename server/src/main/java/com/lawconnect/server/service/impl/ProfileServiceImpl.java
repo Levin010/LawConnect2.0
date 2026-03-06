@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.List;
 
 @Service
 public class ProfileServiceImpl implements ProfileService {
@@ -80,6 +82,30 @@ public class ProfileServiceImpl implements ProfileService {
         response.put("practicingCertificate", profile.getPracticingCertificate());
 
         return response;
+    }
+
+    @Override
+    public List<Map<String, Object>> getAllAdvocates() {
+        List<AdvocateProfile> profiles = advocateProfileRepository.findAll();
+
+        return profiles.stream().map(profile -> {
+            Map<String, Object> response = new HashMap<>();
+            User user = profile.getUser();
+            response.put("username", user.getUsername());
+            response.put("name", user.getName());
+            response.put("email", user.getEmail());
+            response.put("phone", user.getPhone());
+            response.put("gender", profile.getGender());
+            response.put("category", profile.getCategory());
+            response.put("lawFirm", profile.getLawFirm());
+            response.put("county", profile.getCounty());
+            response.put("address", profile.getAddress());
+            response.put("postalAddress", profile.getPostalAddress());
+            response.put("experience", profile.getExperience());
+            response.put("bio", profile.getBio());
+            response.put("profilePicture", profile.getProfilePicture());
+            return response;
+        }).collect(Collectors.toList());
     }
 
     @Override
