@@ -1,7 +1,10 @@
 import SignupForm from '@/components/signup/SignUpForm';
+import Navbar from '@/components/Navbar';
 
 export default function SignupPage() {
   return (
+    <>
+    <Navbar />
     <section
       className="relative min-h-screen flex flex-col items-center justify-center py-12 px-4"
       style={{
@@ -14,6 +17,7 @@ export default function SignupPage() {
       <div className="relative z-10 w-full max-w-lg">
         <SignupForm />
       </div>
-    </section>
+    </section>  
+    </>
   );
 }

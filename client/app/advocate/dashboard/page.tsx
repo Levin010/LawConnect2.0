@@ -1,20 +1,23 @@
-import LogoutButton from '@/components/login/LogoutButton';
+import AdvocateNavbar from '@/components/advocate/AdvocateNavbar';
+import DashboardStats from '@/components/advocate/DashboardStats';
+import OpenCasesTable from '@/components/advocate/OpenCasesTable';
+import Footer from '@/components/Footer';
 
 export default function AdvocateDashboard() {
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="text-center">
+    <>
+      <AdvocateNavbar />
+      <main className="min-h-screen bg-gray-50 px-6 py-8 mx-auto">
         <h1
-          className="text-3xl font-bold mb-2"
+          className="text-2xl font-bold mb-6"
           style={{ fontFamily: 'Georgia, serif', color: '#8B0000' }}
         >
           Advocate Dashboard
         </h1>
-        <p className="text-gray-500" style={{ fontFamily: 'Georgia, serif' }}>
-          Welcome back. Your dashboard is under construction.
-        </p>
-        <LogoutButton />
-      </div>
-    </main>
+        <DashboardStats />
+        <OpenCasesTable />
+      </main>
+      <Footer />
+    </>
   );
 }

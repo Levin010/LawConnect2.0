@@ -1,7 +1,10 @@
 import LoginForm from '@/components/login/LoginForm';
+import Navbar from '@/components/Navbar';
 
 export default function LoginPage() {
   return (
+    <>
+    <Navbar />
     <section
       className="relative min-h-screen flex flex-col items-center justify-center py-12 px-4"
       style={{
@@ -15,5 +18,6 @@ export default function LoginPage() {
         <LoginForm />
       </div>
     </section>
+    </>
   );
 }

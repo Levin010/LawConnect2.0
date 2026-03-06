@@ -17,15 +17,37 @@ export interface AdvocateSearchParams {
   county?: string;
 }
 
+export interface DashboardStats {
+  totalCases: number;
+  activeClients: number;
+  activeCases: number;
+  closedCases: number;
+}
+
+export interface OpenCase {
+  id: number;
+  dateOpened: string;
+  clientName: string;
+  caseName: string;
+}
+
 export const advocateApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAdvocates: builder.query<Advocate[], AdvocateSearchParams>({
-      query: (params) => ({
-        url: '/advocates',
-        params,
+      query: (params) => ({url: '/advocates',params,
       }),
+    }),
+    getAdvocateDashboardStats: builder.query<DashboardStats, void>({
+      query: () => '/advocates/dashboard/stats',
+    }),
+    getAdvocateOpenCases: builder.query<OpenCase[], void>({
+      query: () => '/advocates/dashboard/open-cases',
     }),
   }),
 });
 
-export const { useGetAdvocatesQuery } = advocateApi;
+export const { 
+    useGetAdvocatesQuery,
+    useGetAdvocateDashboardStatsQuery,
+    useGetAdvocateOpenCasesQuery
+ } = advocateApi;
