@@ -1,6 +1,6 @@
 package com.lawconnect.server.service.impl;
 
-import com.lawconnect.server.dto.AdvocateProfileDto;
+import com.lawconnect.server.dto.AdvocateProfileUpdateRequest;
 import com.lawconnect.server.dto.ClientProfileDto;
 import com.lawconnect.server.model.AdvocateProfile;
 import com.lawconnect.server.model.ClientProfile;
@@ -12,6 +12,9 @@ import com.lawconnect.server.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class ProfileServiceImpl implements ProfileService {
@@ -26,26 +29,57 @@ public class ProfileServiceImpl implements ProfileService {
     private UserRepository userRepository;
 
     @Override
-    public AdvocateProfile saveOrUpdateAdvocateProfile(String username, AdvocateProfileDto dto) {
+    public void updateAdvocateFullProfile(String username, AdvocateProfileUpdateRequest request) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        user.setName(request.getName());
+        user.setPhone(request.getPhone());
+        userRepository.save(user);
+
+        AdvocateProfile profile = advocateProfileRepository.findByUser(user)
+                .orElse(new AdvocateProfile());
+
+        profile.setUser(user);
+        profile.setGender(request.getGender());
+        profile.setCategory(request.getCategory());
+        profile.setLawFirm(request.getLawFirm());
+        profile.setCounty(request.getCounty());
+        profile.setAddress(request.getAddress());
+        profile.setPostalAddress(request.getPostalAddress());
+        profile.setExperience(request.getExperience());
+        profile.setBio(request.getBio());
+        profile.setProfilePicture(request.getProfilePicture());
+        profile.setPracticingCertificate(request.getPracticingCertificate());
+
+        advocateProfileRepository.save(profile);
+    }
+
+    @Override
+    public Map<String, Object> getAdvocateFullProfile(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         AdvocateProfile profile = advocateProfileRepository.findByUser(user)
                 .orElse(new AdvocateProfile());
 
-        profile.setUser(user);
-        profile.setGender(dto.getGender());
-        profile.setCategory(dto.getCategory());
-        profile.setLawFirm(dto.getLawFirm());
-        profile.setCounty(dto.getCounty());
-        profile.setAddress(dto.getAddress());
-        profile.setPostalAddress(dto.getPostalAddress());
-        profile.setExperience(dto.getExperience());
-        profile.setBio(dto.getBio());
-        profile.setProfilePicture(dto.getProfilePicture());
-        profile.setPracticingCertificate(dto.getPracticingCertificate());
+        Map<String, Object> response = new HashMap<>();
+        response.put("name", user.getName());
+        response.put("email", user.getEmail());
+        response.put("phone", user.getPhone());
+        response.put("username", user.getUsername());
+        response.put("gender", profile.getGender());
+        response.put("category", profile.getCategory());
+        response.put("lawFirm", profile.getLawFirm());
+        response.put("county", profile.getCounty());
+        response.put("address", profile.getAddress());
+        response.put("postalAddress", profile.getPostalAddress());
+        response.put("experience", profile.getExperience());
+        response.put("bio", profile.getBio());
+        response.put("profilePicture", profile.getProfilePicture());
+        response.put("practicingCertificate", profile.getPracticingCertificate());
 
-        return advocateProfileRepository.save(profile);
+        return response;
     }
 
     @Override
@@ -64,14 +98,6 @@ public class ProfileServiceImpl implements ProfileService {
         profile.setProfilePicture(dto.getProfilePicture());
 
         return clientProfileRepository.save(profile);
-    }
-
-    @Override
-    public AdvocateProfile getAdvocateProfile(String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        return advocateProfileRepository.findByUser(user)
-                .orElse(new AdvocateProfile());
     }
 
     @Override

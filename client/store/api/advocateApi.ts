@@ -31,6 +31,25 @@ export interface OpenCase {
   caseName: string;
 }
 
+export interface AdvocateProfile {
+  // From User
+  name: string;
+  email: string;
+  phone: string;
+  username: string;
+  // From AdvocateProfileDto
+  gender: string;
+  category: string;
+  lawFirm: string;
+  county: string;
+  address: string;
+  postalAddress: string;
+  experience: number | null;
+  bio: string;
+  profilePicture: string | null;
+  practicingCertificate: string | null;
+}
+
 export const advocateApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAdvocates: builder.query<Advocate[], AdvocateSearchParams>({
@@ -43,11 +62,26 @@ export const advocateApi = baseApi.injectEndpoints({
     getAdvocateOpenCases: builder.query<OpenCase[], void>({
       query: () => '/advocates/dashboard/open-cases',
     }),
+    getAdvocateProfile: builder.query<AdvocateProfile, void>({
+    query: () => '/profile/advocate',
+    providesTags: ['AdvocateProfile'],
+    }),
+    updateAdvocateProfile: builder.mutation<void, Partial<AdvocateProfile>>({
+    query: (body) => ({
+        url: '/profile/advocate',
+        method: 'PUT',
+        body,
+        responseHandler: 'text',
+    }),
+    invalidatesTags: ['AdvocateProfile'],
+    }),
   }),
 });
 
 export const { 
     useGetAdvocatesQuery,
     useGetAdvocateDashboardStatsQuery,
-    useGetAdvocateOpenCasesQuery
+    useGetAdvocateOpenCasesQuery,
+    useGetAdvocateProfileQuery,
+    useUpdateAdvocateProfileMutation,
  } = advocateApi;

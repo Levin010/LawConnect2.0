@@ -17,7 +17,6 @@ export default function AdvocateDashboard() {
         <DashboardStats />
         <OpenCasesTable />
       </main>
-      <Footer />
     </>
   );
 }

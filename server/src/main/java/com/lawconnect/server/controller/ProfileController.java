@@ -1,15 +1,16 @@
 package com.lawconnect.server.controller;
 
-import com.lawconnect.server.dto.AdvocateProfileDto;
+import com.lawconnect.server.dto.AdvocateProfileUpdateRequest;
 import com.lawconnect.server.dto.ClientProfileDto;
-import com.lawconnect.server.model.AdvocateProfile;
 import com.lawconnect.server.model.ClientProfile;
 import com.lawconnect.server.service.ProfileService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/profile")
@@ -20,32 +21,32 @@ public class ProfileController {
     private ProfileService profileService;
 
     @PreAuthorize("hasRole('ADVOCATE')")
-    @PostMapping("/advocate")
-    public ResponseEntity<AdvocateProfile> saveAdvocateProfile(
-            Authentication authentication,
-            @RequestBody AdvocateProfileDto dto) {
-        return ResponseEntity.ok(profileService.saveOrUpdateAdvocateProfile(
-                authentication.getName(), dto));
+    @PutMapping("/advocate")
+    public ResponseEntity<?> updateAdvocateProfile(
+            Principal principal,
+            @RequestBody @Valid AdvocateProfileUpdateRequest request) {
+        profileService.updateAdvocateFullProfile(principal.getName(), request);
+        return ResponseEntity.ok("Profile updated successfully");
     }
 
     @PreAuthorize("hasRole('ADVOCATE')")
     @GetMapping("/advocate")
-    public ResponseEntity<AdvocateProfile> getAdvocateProfile(Authentication authentication) {
-        return ResponseEntity.ok(profileService.getAdvocateProfile(authentication.getName()));
+    public ResponseEntity<?> getAdvocateProfile(Principal principal) {
+        return ResponseEntity.ok(profileService.getAdvocateFullProfile(principal.getName()));
     }
 
     @PreAuthorize("hasRole('CLIENT')")
-    @PostMapping("/client")
+    @PutMapping("/client")
     public ResponseEntity<ClientProfile> saveClientProfile(
-            Authentication authentication,
+            Principal principal,
             @RequestBody ClientProfileDto dto) {
         return ResponseEntity.ok(profileService.saveOrUpdateClientProfile(
-                authentication.getName(), dto));
+                principal.getName(), dto));
     }
 
     @PreAuthorize("hasRole('CLIENT')")
     @GetMapping("/client")
-    public ResponseEntity<ClientProfile> getClientProfile(Authentication authentication) {
-        return ResponseEntity.ok(profileService.getClientProfile(authentication.getName()));
+    public ResponseEntity<ClientProfile> getClientProfile(Principal principal) {
+        return ResponseEntity.ok(profileService.getClientProfile(principal.getName()));
     }
 }
