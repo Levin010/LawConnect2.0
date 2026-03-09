@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import { AdvocateProfile } from '@/store/api/advocateApi';
 import { useRouter } from 'next/navigation';
