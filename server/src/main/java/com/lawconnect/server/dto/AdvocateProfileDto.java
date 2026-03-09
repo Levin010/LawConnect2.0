@@ -4,6 +4,8 @@ import lombok.Data;
 
 @Data
 public class AdvocateProfileDto {
+    private String name;
+    private String phone;
     private String gender;
     private String category;
     private String lawFirm;

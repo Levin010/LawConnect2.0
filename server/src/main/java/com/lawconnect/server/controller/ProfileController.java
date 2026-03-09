@@ -1,6 +1,6 @@
 package com.lawconnect.server.controller;
 
-import com.lawconnect.server.dto.AdvocateProfileUpdateRequest;
+import com.lawconnect.server.dto.AdvocateProfileDto;
 import com.lawconnect.server.dto.ClientProfileDto;
 import com.lawconnect.server.model.ClientProfile;
 import com.lawconnect.server.service.ProfileService;
@@ -26,7 +26,7 @@ public class ProfileController {
     @PutMapping("/advocate")
     public ResponseEntity<?> updateAdvocateProfile(
             Principal principal,
-            @RequestBody @Valid AdvocateProfileUpdateRequest request) {
+            @RequestBody @Valid AdvocateProfileDto request) {
         profileService.updateAdvocateFullProfile(principal.getName(), request);
         return ResponseEntity.ok("Profile updated successfully");
     }

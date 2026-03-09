@@ -1,6 +1,6 @@
 package com.lawconnect.server.service.impl;
 
-import com.lawconnect.server.dto.AdvocateProfileUpdateRequest;
+import com.lawconnect.server.dto.AdvocateProfileDto;
 import com.lawconnect.server.dto.ClientProfileDto;
 import com.lawconnect.server.model.AdvocateProfile;
 import com.lawconnect.server.model.ClientProfile;
@@ -31,7 +31,7 @@ public class ProfileServiceImpl implements ProfileService {
     private UserRepository userRepository;
 
     @Override
-    public void updateAdvocateFullProfile(String username, AdvocateProfileUpdateRequest request) {
+    public void updateAdvocateFullProfile(String username, AdvocateProfileDto request) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
