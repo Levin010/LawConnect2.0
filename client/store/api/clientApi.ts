@@ -27,6 +27,28 @@ export interface ClientProfile {
   profilePicture: string | null;
 }
 
+export interface RepresentationRequest {
+  advocateUsername: string;
+  firstName: string;
+  lastName: string;
+  role: 'PLAINTIFF/PETITIONER' | 'DEFENDANT/RESPONDENT';
+  caseDescription: string;
+}
+
+export interface Review {
+  id: number;
+  clientName: string;
+  rating: number;
+  comment: string;
+  createdAt: string;
+}
+
+export interface PostReview {
+  advocateUsername: string;
+  rating: number;
+  comment: string;
+}
+
 export const clientApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getClientDashboardStats: builder.query<DashboardStats, void>({
@@ -48,6 +70,27 @@ export const clientApi = baseApi.injectEndpoints({
     }),
     invalidatesTags: ['ClientProfile'],
     }),
+    sendRepresentationRequest: builder.mutation<void, RepresentationRequest>({
+    query: (body) => ({
+        url: '/requests',
+        method: 'POST',
+        body,
+        responseHandler: 'text',
+    }),
+    }),
+    getAdvocateReviews: builder.query<Review[], string>({
+    query: (username) => `/reviews/${username}`,
+    providesTags: ['Reviews'],
+    }),
+    postReview: builder.mutation<void, PostReview>({
+    query: (body) => ({
+        url: '/reviews',
+        method: 'POST',
+        body,
+        responseHandler: 'text',
+    }),
+    invalidatesTags: ['Reviews'],
+    }),
   }),
 });
 
@@ -56,4 +99,7 @@ export const {
     useGetClientOpenCasesQuery,
     useGetClientProfileQuery,
     useUpdateClientProfileMutation,
+    useSendRepresentationRequestMutation,
+    useGetAdvocateReviewsQuery,
+    usePostReviewMutation,
  } = clientApi;

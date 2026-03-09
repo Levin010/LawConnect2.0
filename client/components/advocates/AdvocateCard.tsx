@@ -1,11 +1,15 @@
 import Image from 'next/image';
 import { AdvocateProfile } from '@/store/api/advocateApi';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   advocate: AdvocateProfile;
 }
 
 export default function AdvocateCard({ advocate }: Props) {
+
+  const router = useRouter();
+
   return (
     <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-100 flex flex-col">
       {/* Card header with crimson background */}
@@ -72,6 +76,7 @@ export default function AdvocateCard({ advocate }: Props) {
           Book Appointment
         </button>
         <button
+          onClick={() => router.push(`/advocates/${advocate.username}`)}
           className="flex-1 py-2.5 rounded-xl text-sm font-semibold border-2 transition-colors hover:bg-gray-50"
           style={{ borderColor: '#8B0000', color: '#8B0000', fontFamily: 'Georgia, serif' }}
         >

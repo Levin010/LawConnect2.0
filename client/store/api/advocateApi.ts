@@ -64,6 +64,9 @@ export const advocateApi = baseApi.injectEndpoints({
     }),
     invalidatesTags: ['AdvocateProfile'],
     }),
+    getAdvocateByUsername: builder.query<AdvocateProfile, string>({
+      query: (username) => `/advocates/${username}`,
+    }),
   }),
 });
 
@@ -73,4 +76,5 @@ export const {
     useGetAdvocateOpenCasesQuery,
     useGetAdvocateProfileQuery,
     useUpdateAdvocateProfileMutation,
+    useGetAdvocateByUsernameQuery,
  } = advocateApi;
