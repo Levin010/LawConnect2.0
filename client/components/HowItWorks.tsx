@@ -2,17 +2,17 @@ const steps = [
   {
     title: '+ Create Account',
     description:
-      "Create a free account to access all features. If looking for a lawyer, create a client account. If you're a certified advocate looking for clients, create an advocate account.",
+      "If looking for a lawyer to represent you in court, create a client account. If you're a certified advocate looking for clients, create an advocate account.",
   },
   {
-    title: '+ Book Appointments',
+    title: '+ Representation Requests',
     description:
-      'Client users can schedule appointments with advocates on the platform. Advocate users can set their appointment times based on their availability.',
+      'Client users can ask an advocate to represent them in legal proceedings by sending a representation request. Advocate users can either accept or reject a request.',
   },
   {
-    title: '+ Launch Case',
+    title: '+ Case Updates',
     description:
-      'Client users can request an advocate to represent them by sending a representation request. Once the advocate approves the request, they will be able to open the case and relay case updates to the client on the platform.',
+      'Once an advocate launches a case, they can post updates and documents on the case pages. Clients can view these updates, communicate with and pay their advocate through the platform.',
   },
 ];
 
