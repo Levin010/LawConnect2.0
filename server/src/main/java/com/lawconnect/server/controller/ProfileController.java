@@ -2,7 +2,6 @@ package com.lawconnect.server.controller;
 
 import com.lawconnect.server.dto.AdvocateProfileDto;
 import com.lawconnect.server.dto.ClientProfileDto;
-import com.lawconnect.server.model.ClientProfile;
 import com.lawconnect.server.service.ProfileService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,16 +43,16 @@ public class ProfileController {
 
     @PreAuthorize("hasRole('CLIENT')")
     @PutMapping("/client")
-    public ResponseEntity<ClientProfile> saveClientProfile(
+    public ResponseEntity<?> updateClientProfile(
             Principal principal,
             @RequestBody ClientProfileDto dto) {
-        return ResponseEntity.ok(profileService.saveOrUpdateClientProfile(
-                principal.getName(), dto));
+        profileService.updateClientFullProfile(principal.getName(), dto);
+        return ResponseEntity.ok("Profile updated successfully");
     }
 
     @PreAuthorize("hasRole('CLIENT')")
     @GetMapping("/client")
-    public ResponseEntity<ClientProfile> getClientProfile(Principal principal) {
-        return ResponseEntity.ok(profileService.getClientProfile(principal.getName()));
+    public ResponseEntity<?> getClientProfile(Principal principal) {
+        return ResponseEntity.ok(profileService.getClientFullProfile(principal.getName()));
     }
 }

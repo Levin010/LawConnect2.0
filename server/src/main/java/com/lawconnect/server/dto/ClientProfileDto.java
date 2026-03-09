@@ -4,6 +4,8 @@ import lombok.Data;
 
 @Data
 public class ClientProfileDto {
+    private String name;
+    private String phone;
     private String gender;
     private String county;
     private String address;

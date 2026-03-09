@@ -109,9 +109,13 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public ClientProfile saveOrUpdateClientProfile(String username, ClientProfileDto dto) {
+    public void updateClientFullProfile(String username, ClientProfileDto dto) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        user.setName(dto.getName());
+        user.setPhone(dto.getPhone());
+        userRepository.save(user);
 
         ClientProfile profile = clientProfileRepository.findByUser(user)
                 .orElse(new ClientProfile());
@@ -123,14 +127,28 @@ public class ProfileServiceImpl implements ProfileService {
         profile.setPostalAddress(dto.getPostalAddress());
         profile.setProfilePicture(dto.getProfilePicture());
 
-        return clientProfileRepository.save(profile);
+        clientProfileRepository.save(profile);
     }
 
     @Override
-    public ClientProfile getClientProfile(String username) {
+    public Map<String, Object> getClientFullProfile(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        return clientProfileRepository.findByUser(user)
+
+        ClientProfile profile = clientProfileRepository.findByUser(user)
                 .orElse(new ClientProfile());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("name", user.getName());
+        response.put("email", user.getEmail());
+        response.put("phone", user.getPhone());
+        response.put("username", user.getUsername());
+        response.put("gender", profile.getGender());
+        response.put("county", profile.getCounty());
+        response.put("address", profile.getAddress());
+        response.put("postalAddress", profile.getPostalAddress());
+        response.put("profilePicture", profile.getProfilePicture());
+
+        return response;
     }
 }
