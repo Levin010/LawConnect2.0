@@ -1,7 +1,6 @@
 import AdvocateNavbar from '@/components/advocate/AdvocateNavbar';
 import DashboardStats from '@/components/advocate/DashboardStats';
 import OpenCasesTable from '@/components/advocate/OpenCasesTable';
-import Footer from '@/components/Footer';
 
 export default function AdvocateDashboard() {
   return (

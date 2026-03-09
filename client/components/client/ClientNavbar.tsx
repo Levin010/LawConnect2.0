@@ -8,12 +8,11 @@ import { RootState } from '@/store';
 import LogoutButton from '@/components/login/LogoutButton';
 
 const casesLinks = [
-  { label: 'My Cases', href: '/advocate/cases' },
-  { label: 'Received Requests', href: '/advocate/requests' },
-  { label: 'New Case', href: '/advocate/cases/new' },
+  { label: 'My Cases', href: '/client/cases' },
+  { label: 'Sent Requests', href: '/client/requests' }
 ];
 
-export default function AdvocateNavbar() {
+export default function ClientNavbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [casesOpen, setCasesOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
@@ -45,7 +44,7 @@ export default function AdvocateNavbar() {
     <header className="relative z-50" style={{ backgroundColor: '#8B0000' }}>
       <div className="flex items-center justify-between px-6 py-3">
         {/* Logo */}
-        <Link href="/advocate/dashboard" className="flex items-center">
+        <Link href="/client/dashboard" className="flex items-center">
           <div className="flex items-center gap-2 bg-white px-3 py-2 rounded">
             <Image
               src="/images/lawconnect_logo.png"
@@ -62,8 +61,12 @@ export default function AdvocateNavbar() {
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-6">
-          <Link href="/advocate/dashboard" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }}>
+          <Link href="/client/dashboard" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }}>
             Dashboard
+          </Link>
+
+          <Link href="/advocates" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }}>
+            Advocate Listing
           </Link>
 
           {/* Cases dropdown */}
@@ -89,12 +92,12 @@ export default function AdvocateNavbar() {
             )}
           </div>
 
-          <Link href="/advocate/appointments" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }}>
+          <Link href="/client/appointments" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }}>
             Appointments
           </Link>
 
-          <Link href="/advocate/bills" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }}>
-            Client Bills
+          <Link href="/client/bills" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }}>
+            My Bills
           </Link>
 
           {/* Account avatar dropdown */}
@@ -135,7 +138,7 @@ export default function AdvocateNavbar() {
       {/* Mobile menu */}
       {menuOpen && (
         <nav className="md:hidden border-t border-white/20 px-6 py-4 flex flex-col gap-4">
-          <Link href="/advocate/dashboard" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
+          <Link href="/client/dashboard" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
             Dashboard
           </Link>
           <div className="flex flex-col gap-2">
@@ -146,13 +149,13 @@ export default function AdvocateNavbar() {
               </Link>
             ))}
           </div>
-          <Link href="/advocate/appointments" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
+          <Link href="/client/appointments" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
             Appointments
           </Link>
-          <Link href="/advocate/bills" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
-            Client Bills
+          <Link href="/client/bills" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
+            My Bills
           </Link>
-          <Link href="/advocate/profile" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
+          <Link href="/client/profile" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
             My Profile
           </Link>
           <LogoutButton />

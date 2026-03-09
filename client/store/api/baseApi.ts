@@ -3,7 +3,7 @@ import { getToken } from '@/lib/auth';
 
 export const baseApi = createApi({
   reducerPath: 'api',
-  tagTypes: ['AdvocateProfile'],
+  tagTypes: ['AdvocateProfile', 'ClientProfile'],
   baseQuery: fetchBaseQuery({
     baseUrl: '/api',
     prepareHeaders: (headers) => {
