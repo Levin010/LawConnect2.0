@@ -65,7 +65,7 @@ export const advocateApi = baseApi.injectEndpoints({
     invalidatesTags: ['AdvocateProfile'],
     }),
     getAdvocateByUsername: builder.query<AdvocateProfile, string>({
-      query: (username) => `/advocates/${username}`,
+      query: (username) => `profile/advocates/${username}`,
     }),
   }),
 });

@@ -6,11 +6,11 @@ import Footer from '@/components/Footer';
 import AdvocateView from '@/components/advocates/view/AdvocateView';
 
 interface Props {
-  params: { username: string };
+  params: Promise<{ username: string }>;
 }
 
-export default function AdvocateDetailPage({ params }: Props) {
-  const { username } = params;
+export default async function AdvocateDetailPage({ params }: Props) {
+  const { username } = await params;
 
   return (
     <>

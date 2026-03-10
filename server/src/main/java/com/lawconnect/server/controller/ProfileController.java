@@ -41,6 +41,11 @@ public class ProfileController {
         return ResponseEntity.ok(profileService.getAllAdvocates());
     }
 
+    @GetMapping("/advocates/{username}")
+    public ResponseEntity<?> getAdvocateByUsername(@PathVariable String username) {
+        return ResponseEntity.ok(profileService.getAdvocateFullProfile(username));
+    }
+
     @PreAuthorize("hasRole('CLIENT')")
     @PutMapping("/client")
     public ResponseEntity<?> updateClientProfile(

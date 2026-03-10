@@ -14,7 +14,7 @@ export default function AdvocateCard({ advocate }: Props) {
 
   return (
     <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-100 flex flex-col">
-      {/* Card header with crimson background */}
+      {/* Card header */}
       <div
         className="flex flex-col items-center pt-8 pb-6 px-6"
         style={{ backgroundColor: '#8B0000' }}

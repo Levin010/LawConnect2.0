@@ -1,4 +1,6 @@
 package com.lawconnect.server.model;
 
-public class PartyRole {
+public enum PartyRole {
+    PLAINTIFF_PETITIONER,
+    DEFENDANT_RESPONDENT
 }

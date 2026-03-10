@@ -31,7 +31,7 @@ export interface RepresentationRequest {
   advocateUsername: string;
   firstName: string;
   lastName: string;
-  role: 'PLAINTIFF/PETITIONER' | 'DEFENDANT/RESPONDENT';
+  partyRole: 'PLAINTIFF_PETITIONER' | 'DEFENDANT_RESPONDENT';
   caseDescription: string;
 }
 
@@ -72,7 +72,7 @@ export const clientApi = baseApi.injectEndpoints({
     }),
     sendRepresentationRequest: builder.mutation<void, RepresentationRequest>({
     query: (body) => ({
-        url: '/requests',
+        url: '/representation-requests',
         method: 'POST',
         body,
         responseHandler: 'text',
