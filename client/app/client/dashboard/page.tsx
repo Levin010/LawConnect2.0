@@ -1,11 +1,11 @@
-import ClientNavbar from '@/components/client/ClientNavbar';
+import Navbar from '@/components/Navbar';
 import DashboardStats from '@/components/client/DashboardStats';
 import OpenCasesTable from '@/components/client/OpenCasesTable';
 
 export default function ClientDashboard() {
   return (
     <>
-      <ClientNavbar />
+      <Navbar />
       <main className="min-h-screen bg-gray-50 px-6 py-8 mx-auto">
         <h1
           className="text-2xl font-bold mb-6"

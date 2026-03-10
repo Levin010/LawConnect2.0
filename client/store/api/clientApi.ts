@@ -35,6 +35,17 @@ export interface RepresentationRequest {
   caseDescription: string;
 }
 
+export interface SentRequest {
+  id: number;
+  advocate: { id: number; name: string; username: string };
+  firstName: string;
+  lastName: string;
+  partyRole: 'PLAINTIFF_PETITIONER' | 'DEFENDANT_RESPONDENT';
+  caseDescription: string;
+  status: 'PENDING' | 'ACCEPTED' | 'REJECTED';
+  requestedAt: string;
+}
+
 export interface Review {
   id: number;
   clientName: string;
@@ -91,6 +102,10 @@ export const clientApi = baseApi.injectEndpoints({
     }),
     invalidatesTags: ['Reviews'],
     }),
+    getSentRequests: builder.query<SentRequest[], void>({
+    query: () => '/representation-requests/my-requests',
+    providesTags: ['Requests'],
+    }),
   }),
 });
 
@@ -102,4 +117,5 @@ export const {
     useSendRepresentationRequestMutation,
     useGetAdvocateReviewsQuery,
     usePostReviewMutation,
+    useGetSentRequestsQuery,
  } = clientApi;

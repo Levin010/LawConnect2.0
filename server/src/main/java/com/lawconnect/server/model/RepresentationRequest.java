@@ -34,6 +34,10 @@ public class RepresentationRequest {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String caseDescription;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private RequestStatus status = RequestStatus.PENDING;
+
     @Column(nullable = false)
     private LocalDateTime requestedAt;
 

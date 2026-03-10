@@ -2,6 +2,7 @@ package com.lawconnect.server.service.impl;
 
 import com.lawconnect.server.dto.RepresentationRequestDto;
 import com.lawconnect.server.model.RepresentationRequest;
+import com.lawconnect.server.model.RequestStatus;
 import com.lawconnect.server.model.User;
 import com.lawconnect.server.repository.RepresentationRequestRepository;
 import com.lawconnect.server.repository.UserRepository;
@@ -52,5 +53,18 @@ public class RepresentationRequestServiceImpl implements RepresentationRequestSe
         User client = userRepository.findByUsername(clientUsername)
                 .orElseThrow(() -> new UsernameNotFoundException("Client not found"));
         return representationRequestRepository.findByClient(client);
+    }
+
+    @Override
+    public RepresentationRequest updateRequestStatus(Long requestId, RequestStatus status, String advocateUsername) {
+        RepresentationRequest request = representationRequestRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException("Request not found"));
+
+        if (!request.getAdvocate().getUsername().equals(advocateUsername)) {
+            throw new RuntimeException("Unauthorized to update this request");
+        }
+
+        request.setStatus(status);
+        return representationRequestRepository.save(request);
     }
 }

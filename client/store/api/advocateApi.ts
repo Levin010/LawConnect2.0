@@ -39,6 +39,17 @@ export interface AdvocateProfile {
   practicingCertificate: string | null;
 }
 
+export interface ReceivedRequest {
+  id: number;
+  client: { id: number; name: string; username: string };
+  firstName: string;
+  lastName: string;
+  partyRole: 'PLAINTIFF_PETITIONER' | 'DEFENDANT_RESPONDENT';
+  caseDescription: string;
+  status: 'PENDING' | 'ACCEPTED' | 'REJECTED';
+  requestedAt: string;
+}
+
 export const advocateApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAdvocates: builder.query<AdvocateProfile[], AdvocateSearchParams>({
@@ -67,6 +78,18 @@ export const advocateApi = baseApi.injectEndpoints({
     getAdvocateByUsername: builder.query<AdvocateProfile, string>({
       query: (username) => `profile/advocates/${username}`,
     }),
+    getReceivedRequests: builder.query<ReceivedRequest[], void>({
+      query: () => '/representation-requests/incoming',
+      providesTags: ['Requests'],
+    }),
+    updateRequestStatus: builder.mutation<void, { requestId: number; status: 'ACCEPTED' | 'REJECTED' }>({
+      query: ({ requestId, status }) => ({
+        url: `/representation-requests/${requestId}/status?status=${status}`,
+        method: 'PUT',
+        responseHandler: 'text',
+      }),
+      invalidatesTags: ['Requests'],
+    }),
   }),
 });
 
@@ -77,4 +100,6 @@ export const {
     useGetAdvocateProfileQuery,
     useUpdateAdvocateProfileMutation,
     useGetAdvocateByUsernameQuery,
+    useGetReceivedRequestsQuery,
+    useUpdateRequestStatusMutation,
  } = advocateApi;

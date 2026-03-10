@@ -2,6 +2,7 @@ package com.lawconnect.server.controller;
 
 import com.lawconnect.server.dto.RepresentationRequestDto;
 import com.lawconnect.server.model.RepresentationRequest;
+import com.lawconnect.server.model.RequestStatus;
 import com.lawconnect.server.service.RepresentationRequestService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +39,14 @@ public class RepresentationRequestController {
     @GetMapping("/my-requests")
     public ResponseEntity<List<RepresentationRequest>> getMyRequests(Principal principal) {
         return ResponseEntity.ok(representationRequestService.getRequestsByClient(principal.getName()));
+    }
+
+    @PreAuthorize("hasRole('ADVOCATE')")
+    @PutMapping("/{requestId}/status")
+    public ResponseEntity<RepresentationRequest> updateStatus(
+            @PathVariable Long requestId,
+            @RequestParam RequestStatus status,
+            Principal principal) {
+        return ResponseEntity.ok(representationRequestService.updateRequestStatus(requestId, status, principal.getName()));
     }
 }
