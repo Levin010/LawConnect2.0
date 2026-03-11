@@ -66,10 +66,6 @@ export default function AdvocateNavbar() {
             Dashboard
           </Link>
 
-          <Link href="/advocates" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }}>
-            Advocate Listing
-          </Link>
-
           {/* Cases dropdown */}
           <div className="relative" ref={casesRef}>
             <button
@@ -141,9 +137,6 @@ export default function AdvocateNavbar() {
         <nav className="md:hidden border-t border-white/20 px-6 py-4 flex flex-col gap-4">
           <Link href="/advocate/dashboard" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
             Dashboard
-          </Link>
-          <Link href="/advocates" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
-            Advocate Listing
           </Link>
           <div className="flex flex-col gap-2">
             <span className="text-white/60 text-xs uppercase tracking-wider" style={{ fontFamily: 'Georgia, serif' }}>Cases</span>

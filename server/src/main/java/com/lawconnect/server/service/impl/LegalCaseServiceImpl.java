@@ -44,7 +44,7 @@ public class LegalCaseServiceImpl implements LegalCaseService {
     }
 
     @Override
-    public LegalCase updateCase(Long caseId, String advocateUsername, LegalCaseDto dto) {
+    public LegalCase updateCase(String caseId, String advocateUsername, LegalCaseDto dto) {
         LegalCase legalCase = legalCaseRepository.findById(caseId)
                 .orElseThrow(() -> new RuntimeException("Case not found"));
 
@@ -61,7 +61,7 @@ public class LegalCaseServiceImpl implements LegalCaseService {
     }
 
     @Override
-    public LegalCase closeCase(Long caseId, String advocateUsername) {
+    public LegalCase closeCase(String caseId, String advocateUsername) {
         LegalCase legalCase = legalCaseRepository.findById(caseId)
                 .orElseThrow(() -> new RuntimeException("Case not found"));
 
@@ -88,7 +88,7 @@ public class LegalCaseServiceImpl implements LegalCaseService {
     }
 
     @Override
-    public LegalCase getCaseById(Long caseId) {
+    public LegalCase getCaseById(String caseId) {
         return legalCaseRepository.findById(caseId)
                 .orElseThrow(() -> new RuntimeException("Case not found"));
     }

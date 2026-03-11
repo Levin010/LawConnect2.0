@@ -32,7 +32,7 @@ public class LegalCaseController {
     @PutMapping("/{caseId}")
     public ResponseEntity<LegalCase> updateCase(
             Principal principal,
-            @PathVariable Long caseId,
+            @PathVariable String caseId,
             @RequestBody @Valid LegalCaseDto dto) {
         return ResponseEntity.ok(legalCaseService.updateCase(caseId, principal.getName(), dto));
     }
@@ -41,7 +41,7 @@ public class LegalCaseController {
     @PutMapping("/{caseId}/close")
     public ResponseEntity<LegalCase> closeCase(
             Principal principal,
-            @PathVariable Long caseId) {
+            @PathVariable String caseId) {
         return ResponseEntity.ok(legalCaseService.closeCase(caseId, principal.getName()));
     }
 
@@ -58,7 +58,7 @@ public class LegalCaseController {
     }
 
     @GetMapping("/{caseId}")
-    public ResponseEntity<LegalCase> getCaseById(@PathVariable Long caseId) {
+    public ResponseEntity<LegalCase> getCaseById(@PathVariable String caseId) {
         return ResponseEntity.ok(legalCaseService.getCaseById(caseId));
     }
 }
