@@ -35,7 +35,7 @@ public class RepresentationRequestServiceImpl implements RepresentationRequestSe
         request.setAdvocate(advocate);
         request.setFirstName(dto.getFirstName());
         request.setLastName(dto.getLastName());
-        request.setPartyRole(dto.getPartyRole());
+        request.setClientRole(dto.getClientRole());
         request.setCaseDescription(dto.getCaseDescription());
 
         return representationRequestRepository.save(request);

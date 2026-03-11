@@ -6,26 +6,26 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Table(name = "representation_requests")
-public class RepresentationRequest {
+@Table(name = "legal_cases")
+public class LegalCase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "client_id", nullable = false)
-    private User client;
-
-    @ManyToOne
     @JoinColumn(name = "advocate_id", nullable = false)
     private User advocate;
 
-    @Column(nullable = false)
-    private String firstName;
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = true)
+    private User client;
 
     @Column(nullable = false)
-    private String lastName;
+    private String caseName;
+
+    @Column(nullable = false, unique = true)
+    private String caseNumber;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -36,13 +36,13 @@ public class RepresentationRequest {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private RequestStatus status = RequestStatus.PENDING;
+    private CaseStatus status = CaseStatus.OPEN;
 
     @Column(nullable = false)
-    private LocalDateTime requestedAt;
+    private LocalDateTime dateLaunched;
 
     @PrePersist
     public void prePersist() {
-        requestedAt = LocalDateTime.now();
+        dateLaunched = LocalDateTime.now();
     }
 }

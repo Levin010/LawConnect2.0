@@ -44,10 +44,24 @@ export interface ReceivedRequest {
   client: { id: number; name: string; username: string };
   firstName: string;
   lastName: string;
-  partyRole: 'PLAINTIFF_PETITIONER' | 'DEFENDANT_RESPONDENT';
+  clientRole: 'PLAINTIFF_PETITIONER' | 'DEFENDANT_RESPONDENT';
   caseDescription: string;
   status: 'PENDING' | 'ACCEPTED' | 'REJECTED';
   requestedAt: string;
+}
+
+export interface CreateCaseDto {
+  caseName: string;
+  caseNumber: string;
+  clientRole: 'PLAINTIFF_PETITIONER' | 'DEFENDANT_RESPONDENT';
+  caseDescription: string;
+  clientUsername?: string;
+}
+
+export interface ClientUser {
+  username: string;
+  name: string;
+  email: string;
 }
 
 export const advocateApi = baseApi.injectEndpoints({
@@ -90,6 +104,18 @@ export const advocateApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Requests'],
     }),
+    createCase: builder.mutation<void, CreateCaseDto>({
+      query: (body) => ({
+        url: '/cases',
+        method: 'POST',
+        body,
+        responseHandler: 'text',
+      }),
+      invalidatesTags: ['Cases'],
+    }),
+    searchClients: builder.query<ClientUser[], string>({
+      query: (search) => `/users/clients/search?query=${search}`,
+    }),
   }),
 });
 
@@ -102,4 +128,6 @@ export const {
     useGetAdvocateByUsernameQuery,
     useGetReceivedRequestsQuery,
     useUpdateRequestStatusMutation,
+    useCreateCaseMutation,
+    useSearchClientsQuery,
  } = advocateApi;

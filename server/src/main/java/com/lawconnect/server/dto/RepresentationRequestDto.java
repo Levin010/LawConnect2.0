@@ -1,6 +1,6 @@
 package com.lawconnect.server.dto;
 
-import com.lawconnect.server.model.PartyRole;
+import com.lawconnect.server.model.ClientRole;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -15,7 +15,7 @@ public class RepresentationRequestDto {
     private String lastName;
 
     @NotNull(message = "Party role is required")
-    private PartyRole partyRole;
+    private ClientRole clientRole;
 
     @NotBlank(message = "Case description is required")
     private String caseDescription;

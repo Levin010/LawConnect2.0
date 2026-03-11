@@ -42,10 +42,10 @@ function RequestCard({ request }: { request: SentRequest }) {
           </div>
           <div className="flex items-center gap-2">
             <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider w-32" style={{ fontFamily: 'Georgia, serif' }}>
-              Party Role
+              Client Role
             </span>
             <span className="text-sm text-gray-700" style={{ fontFamily: 'Georgia, serif' }}>
-              {request.partyRole.replace('_', ' / ')}
+              {request.clientRole.replace('_', ' / ')}
             </span>
           </div>
           <div className="flex items-start gap-2">

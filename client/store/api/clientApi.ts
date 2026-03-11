@@ -31,7 +31,7 @@ export interface RepresentationRequest {
   advocateUsername: string;
   firstName: string;
   lastName: string;
-  partyRole: 'PLAINTIFF_PETITIONER' | 'DEFENDANT_RESPONDENT';
+  clientRole: 'PLAINTIFF_PETITIONER' | 'DEFENDANT_RESPONDENT';
   caseDescription: string;
 }
 
@@ -40,7 +40,7 @@ export interface SentRequest {
   advocate: { id: number; name: string; username: string };
   firstName: string;
   lastName: string;
-  partyRole: 'PLAINTIFF_PETITIONER' | 'DEFENDANT_RESPONDENT';
+  clientRole: 'PLAINTIFF_PETITIONER' | 'DEFENDANT_RESPONDENT';
   caseDescription: string;
   status: 'PENDING' | 'ACCEPTED' | 'REJECTED';
   requestedAt: string;

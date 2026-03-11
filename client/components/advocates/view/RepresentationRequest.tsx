@@ -12,7 +12,7 @@ export default function RepresentationRequest({ advocateUsername }: Props) {
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
-    partyRole: '' as 'PLAINTIFF_PETITIONER' | 'DEFENDANT_RESPONDENT' | '',
+    clientRole: '' as 'PLAINTIFF_PETITIONER' | 'DEFENDANT_RESPONDENT' | '',
     caseDescription: '',
   });
   const [successMessage, setSuccessMessage] = useState('');
@@ -28,7 +28,7 @@ export default function RepresentationRequest({ advocateUsername }: Props) {
     setSuccessMessage('');
     setErrorMessage('');
 
-    if (!form.firstName || !form.lastName || !form.partyRole || !form.caseDescription) {
+    if (!form.firstName || !form.lastName || !form.clientRole || !form.caseDescription) {
       setErrorMessage('All fields are required.');
       return;
     }
@@ -38,11 +38,11 @@ export default function RepresentationRequest({ advocateUsername }: Props) {
         advocateUsername,
         firstName: form.firstName,
         lastName: form.lastName,
-        partyRole: form.partyRole as 'PLAINTIFF_PETITIONER' | 'DEFENDANT_RESPONDENT',
+        clientRole: form.clientRole as 'PLAINTIFF_PETITIONER' | 'DEFENDANT_RESPONDENT',
         caseDescription: form.caseDescription,
       }).unwrap();
       setSuccessMessage('Request sent successfully.');
-      setForm({ firstName: '', lastName: '', partyRole: '', caseDescription: '' });
+      setForm({ firstName: '', lastName: '', clientRole: '', caseDescription: '' });
     } catch {
       setErrorMessage('Failed to send request. Please try again.');
     }
@@ -84,7 +84,7 @@ export default function RepresentationRequest({ advocateUsername }: Props) {
 
         <div>
           <label className="block text-white/70 text-xs mb-1.5 uppercase tracking-wider" style={{ fontFamily: 'Georgia, serif' }}>Your Role</label>
-          <select name="partyRole" value={form.partyRole} onChange={handleChange} className={inputClass} style={{ fontFamily: 'Georgia, serif' }}>
+          <select name="clientRole" value={form.clientRole} onChange={handleChange} className={inputClass} style={{ fontFamily: 'Georgia, serif' }}>
             <option value="" disabled>Select role</option>
             <option value="PLAINTIFF_PETITIONER">Plaintiff/Petitioner</option>
             <option value="DEFENDANT_RESPONDENT">Defendant/Respondent</option>
