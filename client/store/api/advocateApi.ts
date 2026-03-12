@@ -64,6 +64,31 @@ export interface ClientUser {
   email: string;
 }
 
+export interface LegalCase {
+  id: string;
+  caseName: string;
+  caseNumber: string;
+  clientRole: 'PLAINTIFF_PETITIONER' | 'DEFENDANT_RESPONDENT';
+  caseDescription: string;
+  status: 'OPEN' | 'CLOSED';
+  dateLaunched: string;
+  client: { id: number; name: string; username: string } | null;
+}
+
+export interface CaseUpdate {
+  id: string;
+  title: string;
+  description: string;
+  createdAt: string;
+  documents: { id: number; fileName: string; fileUrl: string }[];
+}
+
+export interface CreateCaseUpdateDto {
+  title: string;
+  description: string;
+  documents?: File[];
+}
+
 export const advocateApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAdvocates: builder.query<AdvocateProfile[], AdvocateSearchParams>({
@@ -116,6 +141,51 @@ export const advocateApi = baseApi.injectEndpoints({
     searchClients: builder.query<ClientUser[], string>({
       query: (search) => `/users/clients/search?query=${search}`,
     }),
+    getAdvocateCases: builder.query<LegalCase[], void>({
+      query: () => '/cases/my-cases',
+      providesTags: ['Cases'],
+    }),
+    getCaseById: builder.query<LegalCase, string>({
+      query: (id) => `/cases/${id}`,
+      providesTags: ['Cases'],
+    }),
+    closeCase: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/cases/${id}/close`,
+        method: 'PUT',
+        responseHandler: 'text',
+      }),
+      invalidatesTags: ['Cases'],
+    }),
+    getCaseUpdates: builder.query<CaseUpdate[], string>({
+      query: (caseId) => `/cases/${caseId}/updates`,
+      providesTags: ['CaseUpdates'],
+    }),
+    createCaseUpdate: builder.mutation<void, { caseId: string; formData: FormData }>({
+      query: ({ caseId, formData }) => ({
+        url: `/cases/${caseId}/updates`,
+        method: 'POST',
+        body: formData,
+      }),
+      invalidatesTags: ['CaseUpdates'],
+    }),
+    updateCase: builder.mutation<LegalCase, { id: string; body: CreateCaseDto }>({
+      query: ({ id, body }) => ({
+        url: `/cases/${id}`,
+        method: 'PUT',
+        body,
+        responseHandler: 'text',
+      }),
+      invalidatesTags: ['Cases'],
+    }),
+    reopenCase: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/cases/${id}/reopen`,
+        method: 'PUT',
+        responseHandler: 'text',
+      }),
+      invalidatesTags: ['Cases'],
+    }),
   }),
 });
 
@@ -130,4 +200,11 @@ export const {
     useUpdateRequestStatusMutation,
     useCreateCaseMutation,
     useSearchClientsQuery,
+    useGetAdvocateCasesQuery,
+    useGetCaseByIdQuery,
+    useCloseCaseMutation,
+    useGetCaseUpdatesQuery,
+    useCreateCaseUpdateMutation,
+    useUpdateCaseMutation,
+    useReopenCaseMutation,
  } = advocateApi;
