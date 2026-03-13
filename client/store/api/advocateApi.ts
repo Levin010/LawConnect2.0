@@ -169,6 +169,23 @@ export const advocateApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['CaseUpdates'],
     }),
+    updateCaseUpdate: builder.mutation<CaseUpdate, { caseId: string; updateId: string; body: CreateCaseUpdateDto }>({
+      query: ({ caseId, updateId, body }) => ({
+        url: `/cases/${caseId}/updates/${updateId}`,
+        method: 'PUT',
+        body,
+        responseHandler: 'text',
+      }),
+      invalidatesTags: ['CaseUpdates'],
+    }),
+    deleteCaseUpdate: builder.mutation<void, { caseId: string; updateId: string; }>({
+      query: ({ caseId, updateId }) => ({
+        url: `/cases/${caseId}/updates/${updateId}`,
+        method: 'DELETE',
+        responseHandler: 'text',
+      }),
+      invalidatesTags: ['CaseUpdates'],
+    }),
     updateCase: builder.mutation<LegalCase, { id: string; body: CreateCaseDto }>({
       query: ({ id, body }) => ({
         url: `/cases/${id}`,
@@ -207,4 +224,5 @@ export const {
     useCreateCaseUpdateMutation,
     useUpdateCaseMutation,
     useReopenCaseMutation,
+    useUpdateCaseUpdateMutation
  } = advocateApi;

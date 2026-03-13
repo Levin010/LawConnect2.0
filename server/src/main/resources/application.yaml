@@ -2,9 +2,9 @@ spring:
   application:
     name: server
   datasource:
-    url: jdbc:postgresql://ep-icy-surf-al2y2h68-pooler.c-3.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
-    username: neondb_owner
-    password: npg_5I4cYiBQsPWl
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
   jpa:
     show-sql: true
     hibernate:
@@ -18,7 +18,7 @@ jwt:
     validity: 18000
     prefix: Bearer
   signing:
-    key: K24DCFRVbivUOKXUcVpKJn9zTNT0Mm/kKiuGw8jywOg=
+    key: ${JWT_SIGNING_KEY}
   authorities:
     key: roles
   header:
@@ -26,6 +26,11 @@ jwt:
 
 server:
   port: 8080
+
+cloudinary:
+  cloud-name: ${CLOUDINARY_CLOUD_NAME}
+  api-key: ${CLOUDINARY_API_KEY}
+  api-secret: ${CLOUDINARY_API_SECRET}
 
 #logging:
 #  level:
