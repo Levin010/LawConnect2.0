@@ -139,66 +139,7 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
         {/* Bottom — case updates */}
 
         <CaseUpdates caseId={caseId} caseStatus={legalCase.status} />
-        {/* <div>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold" style={{ fontFamily: 'Georgia, serif', color: '#8B0000' }}>
-              Case Updates
-            </h2>
-            {legalCase.status === 'OPEN' && (
-              <button
-                onClick={() => setShowUpdateModal(true)}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white hover:opacity-90 transition-opacity"
-                style={{ backgroundColor: '#8B0000', fontFamily: 'Georgia, serif' }}
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-                New Update
-              </button>
-            )}
-          </div>
-
-          {!updates || updates.length === 0 ? (
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm px-6 py-12 text-center text-gray-400 text-sm" style={{ fontFamily: 'Georgia, serif' }}>
-              No updates yet for this case.
-            </div>
-          ) : (
-            <div className="flex flex-col gap-4">
-              {[...updates].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).map((update) => (
-                <div key={update.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-                  <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-base font-bold" style={{ fontFamily: 'Georgia, serif', color: '#8B0000' }}>
-                      {update.title}
-                    </h3>
-                    <span className="text-xs text-gray-400 shrink-0 ml-4" style={{ fontFamily: 'Georgia, serif' }}>
-                      {new Date(update.createdAt).toLocaleDateString('en-KE', { day: 'numeric', month: 'short', year: 'numeric' })}
-                    </span>
-                  </div>
-                  <p className="text-sm text-gray-600 leading-relaxed" style={{ fontFamily: 'Georgia, serif' }}>{update.description}</p>
-                  {update.documents.length > 0 && (
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {update.documents.map((doc) => (
-                        <a
-                          key={doc.id}
-                          href={doc.fileUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border hover:opacity-70 transition-opacity"
-                          style={{ borderColor: '#8B0000', color: '#8B0000', fontFamily: 'Georgia, serif' }}
-                        >
-                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                          </svg>
-                          {doc.fileName}
-                        </a>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </div> */}
+        
       </div>
     </>
   );
