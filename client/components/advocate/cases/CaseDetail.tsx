@@ -5,6 +5,7 @@ import EditCaseModal from './EditCaseModal';
 import { useGetCaseByIdQuery, useGetCaseUpdatesQuery, useCloseCaseMutation, useReopenCaseMutation } from '@/store/api/advocateApi';
 import CaseUpdateModal from './CaseUpdateModal';
 import DocumentRepository from './DocumentRepository';
+import CaseUpdates from './CaseUpdates';
 
 export default function CaseDetail({ caseId }: { caseId: string }) {
   const { data: legalCase, isLoading, isError } = useGetCaseByIdQuery(caseId);
@@ -136,7 +137,9 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
         </div>
 
         {/* Bottom — case updates */}
-        <div>
+
+        <CaseUpdates caseId={caseId} caseStatus={legalCase.status} />
+        {/* <div>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-bold" style={{ fontFamily: 'Georgia, serif', color: '#8B0000' }}>
               Case Updates
@@ -195,7 +198,7 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
               ))}
             </div>
           )}
-        </div>
+        </div> */}
       </div>
     </>
   );

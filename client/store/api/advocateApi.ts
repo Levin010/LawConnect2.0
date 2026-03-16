@@ -224,5 +224,6 @@ export const {
     useCreateCaseUpdateMutation,
     useUpdateCaseMutation,
     useReopenCaseMutation,
-    useUpdateCaseUpdateMutation
+    useUpdateCaseUpdateMutation,
+    useDeleteCaseUpdateMutation
  } = advocateApi;
