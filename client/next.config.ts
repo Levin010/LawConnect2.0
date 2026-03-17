@@ -4,6 +4,12 @@ const nextConfig: NextConfig = {
   images: {
     // Add external domains here if you load images from a CDN later
     domains: [],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+      },
+    ],
   },
   async rewrites() {
     return [

@@ -24,8 +24,8 @@ export default function AdvocateCard({ advocate }: Props) {
             <Image
               src={advocate.profilePicture}
               alt={advocate.name}
-              width={96}
-              height={96}
+              width={192}
+              height={192}
               className="object-cover w-full h-full"
             />
           ) : (

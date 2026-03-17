@@ -135,7 +135,8 @@ export default function ProfileForm() {
           <ProfilePicture
             name={form.name}
             profilePicture={form.profilePicture}
-            onImageChange={(base64) => setForm((prev) => ({ ...prev, profilePicture: base64 }))}
+            isEditing={isEditing}
+            onImageChange={(url) => setForm((prev) => ({ ...prev, profilePicture: url }))}
           />
 
           {/* Read-only fields */}
@@ -265,9 +266,22 @@ export default function ProfileForm() {
           setIsEditing(false);
           setErrorMessage('');
           setSuccessMessage('');
-          if (profile) setForm({ ...profile, ...Object.fromEntries(
-            Object.entries(profile).map(([k, v]) => [k, v ?? ''])
-          )});
+          if (profile) setForm({
+            name: profile.name ?? '',
+            email: profile.email ?? '',
+            phone: profile.phone ?? '',
+            username: profile.username ?? '',
+            gender: profile.gender ?? '',
+            category: profile.category ?? '',
+            lawFirm: profile.lawFirm ?? '',
+            county: profile.county ?? '',
+            address: profile.address ?? '',
+            postalAddress: profile.postalAddress ?? '',
+            experience: profile.experience ?? null,
+            bio: profile.bio ?? '',
+            profilePicture: profile.profilePicture ?? null,
+            practicingCertificate: profile.practicingCertificate ?? null,
+          });
         }}
         className="px-8 py-3 rounded-xl font-semibold text-sm border-2 hover:bg-gray-50 transition-colors"
         style={{ borderColor: '#8B0000', color: '#8B0000', fontFamily: 'Georgia, serif' }}
