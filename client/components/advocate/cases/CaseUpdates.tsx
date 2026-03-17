@@ -20,7 +20,7 @@ function EditUpdateForm({
   onCancel,
 }: {
   update: CaseUpdate;
-  onSave: (body: CreateCaseUpdateDto) => Promise<void>;
+  onSave: (formData: FormData) => Promise<void>;
   onCancel: () => void;
 }) {
   const [title, setTitle] = useState(update.title);
@@ -30,7 +30,10 @@ function EditUpdateForm({
   const handleSave = async () => {
     if (!title.trim() || !description.trim()) return;
     setSaving(true);
-    await onSave({ title, description });
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
+    await onSave(formData);
     setSaving(false);
   };
 
@@ -190,8 +193,8 @@ export default function CaseUpdates({ caseId, caseStatus }: Props) {
                 {editingUpdate?.id === update.id ? (
                   <EditUpdateForm
                     update={update}
-                    onSave={async (body) => {
-                      await updateCaseUpdate({ caseId, updateId: String(update.id), body });
+                    onSave={async (formData) => {
+                      await updateCaseUpdate({ caseId, updateId: String(update.id), formData });
                       setEditingUpdate(null);
                     }}
                     onCancel={() => setEditingUpdate(null)}

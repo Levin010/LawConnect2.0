@@ -169,12 +169,11 @@ export const advocateApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['CaseUpdates'],
     }),
-    updateCaseUpdate: builder.mutation<CaseUpdate, { caseId: string; updateId: string; body: CreateCaseUpdateDto }>({
-      query: ({ caseId, updateId, body }) => ({
+    updateCaseUpdate: builder.mutation<CaseUpdate, { caseId: string; updateId: string; formData: FormData }>({
+      query: ({ caseId, updateId, formData }) => ({
         url: `/cases/${caseId}/updates/${updateId}`,
         method: 'PUT',
-        body,
-        responseHandler: 'text',
+        body: formData,
       }),
       invalidatesTags: ['CaseUpdates'],
     }),
