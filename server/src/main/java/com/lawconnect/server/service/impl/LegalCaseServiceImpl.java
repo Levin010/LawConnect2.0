@@ -1,5 +1,6 @@
 package com.lawconnect.server.service.impl;
 
+import com.lawconnect.server.dto.DashboardStats;
 import com.lawconnect.server.dto.LegalCaseDto;
 import com.lawconnect.server.model.CaseStatus;
 import com.lawconnect.server.model.LegalCase;
@@ -91,5 +92,18 @@ public class LegalCaseServiceImpl implements LegalCaseService {
     public LegalCase getCaseById(String caseId) {
         return legalCaseRepository.findById(caseId)
                 .orElseThrow(() -> new RuntimeException("Case not found"));
+    }
+
+    @Override
+    public DashboardStats getAdvocateDashboardStats(String advocateUsername) {
+        User advocate = userRepository.findByUsername(advocateUsername)
+                .orElseThrow(() -> new UsernameNotFoundException("Advocate not found"));
+
+        long totalCases = legalCaseRepository.countByAdvocate(advocate);
+        long activeCases = legalCaseRepository.countByAdvocateAndStatus(advocate, CaseStatus.OPEN);
+        long closedCases = legalCaseRepository.countByAdvocateAndStatus(advocate, CaseStatus.CLOSED);
+        long activeClients = legalCaseRepository.countDistinctClientByAdvocateAndStatus(advocate, CaseStatus.OPEN);
+
+        return new DashboardStats(totalCases, activeClients, activeCases, closedCases);
     }
 }

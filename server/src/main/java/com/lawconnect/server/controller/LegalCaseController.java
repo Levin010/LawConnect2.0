@@ -1,5 +1,6 @@
 package com.lawconnect.server.controller;
 
+import com.lawconnect.server.dto.DashboardStats;
 import com.lawconnect.server.dto.LegalCaseDto;
 import com.lawconnect.server.model.LegalCase;
 import com.lawconnect.server.service.LegalCaseService;
@@ -60,5 +61,11 @@ public class LegalCaseController {
     @GetMapping("/{caseId}")
     public ResponseEntity<LegalCase> getCaseById(@PathVariable String caseId) {
         return ResponseEntity.ok(legalCaseService.getCaseById(caseId));
+    }
+
+    @PreAuthorize("hasRole('ADVOCATE')")
+    @GetMapping("/dashboard/stats")
+    public ResponseEntity<DashboardStats> getDashboardStats(Principal principal) {
+        return ResponseEntity.ok(legalCaseService.getAdvocateDashboardStats(principal.getName()));
     }
 }

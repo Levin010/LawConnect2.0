@@ -61,6 +61,7 @@ export interface PostReview {
 }
 
 export const clientApi = baseApi.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     getClientDashboardStats: builder.query<DashboardStats, void>({
       query: () => '/clients/dashboard/stats',

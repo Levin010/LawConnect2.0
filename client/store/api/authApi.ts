@@ -19,6 +19,7 @@ interface AuthTokenResponse {
 }
 
 export const authApi = baseApi.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     login: builder.mutation<AuthTokenResponse, LoginRequest>({
       query: (credentials) => ({

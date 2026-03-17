@@ -90,16 +90,14 @@ export interface CreateCaseUpdateDto {
 }
 
 export const advocateApi = baseApi.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     getAdvocates: builder.query<AdvocateProfile[], AdvocateSearchParams>({
       query: (params) => ({url: '/profile/advocates',params,
       }),
     }),
     getAdvocateDashboardStats: builder.query<DashboardStats, void>({
-      query: () => '/advocates/dashboard/stats',
-    }),
-    getAdvocateOpenCases: builder.query<OpenCase[], void>({
-      query: () => '/advocates/dashboard/open-cases',
+      query: () => '/cases/dashboard/stats',
     }),
     getAdvocateProfile: builder.query<AdvocateProfile, void>({
     query: () => '/profile/advocate',
@@ -208,7 +206,6 @@ export const advocateApi = baseApi.injectEndpoints({
 export const { 
     useGetAdvocatesQuery,
     useGetAdvocateDashboardStatsQuery,
-    useGetAdvocateOpenCasesQuery,
     useGetAdvocateProfileQuery,
     useUpdateAdvocateProfileMutation,
     useGetAdvocateByUsernameQuery,

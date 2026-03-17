@@ -1,28 +1,13 @@
 'use client';
 
 import { useGetAdvocateDashboardStatsQuery } from '@/store/api/advocateApi';
+import { FileText, Users, Scale, FileCheck } from 'lucide-react';
 
 const statConfig = [
-  { key: 'totalCases', label: 'Total Cases Opened', icon: (
-    <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-    </svg>
-  )},
-  { key: 'activeClients', label: 'Active Clients', icon: (
-    <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-    </svg>
-  )},
-  { key: 'activeCases', label: 'Active Cases', icon: (
-    <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
-    </svg>
-  )},
-  { key: 'closedCases', label: 'Closed Cases', icon: (
-    <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-  )},
+  { key: 'totalCases', label: 'Total Cases Opened', icon: <FileText className="w-7 h-7" strokeWidth={1.8} /> },
+  { key: 'activeClients', label: 'Active Clients', icon: <Users className="w-7 h-7" strokeWidth={1.8} /> },
+  { key: 'activeCases', label: 'Active Cases', icon: <Scale className="w-7 h-7" strokeWidth={1.8} /> },
+  { key: 'closedCases', label: 'Closed Cases', icon: <FileCheck className="w-7 h-7" strokeWidth={1.8} /> },
 ] as const;
 
 export default function DashboardStats() {
@@ -41,7 +26,7 @@ export default function DashboardStats() {
               className="text-3xl font-bold"
               style={{ color: '#8B0000', fontFamily: 'Georgia, serif' }}
             >
-              {isLoading ? '—' : (stats?.[key] ?? 0)}
+              {isLoading ? '...' : (stats?.[key] ?? 0)}
             </span>
           </div>
           <p className="text-sm text-gray-500 font-medium" style={{ fontFamily: 'Georgia, serif' }}>
