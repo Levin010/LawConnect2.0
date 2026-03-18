@@ -1,5 +1,6 @@
 package com.lawconnect.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.util.UUID;
@@ -15,6 +16,7 @@ public class CaseUpdateDocument {
 
     @ManyToOne
     @JoinColumn(name = "case_update_id", nullable = false)
+    @JsonIgnore
     private CaseUpdate caseUpdate;
 
     @Column(nullable = false)

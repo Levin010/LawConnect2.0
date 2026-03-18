@@ -1,5 +1,6 @@
 package com.lawconnect.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ public class CaseUpdate {
 
     @ManyToOne
     @JoinColumn(name = "case_id", nullable = false)
+    @JsonIgnore
     private LegalCase legalCase;
 
     @Column(nullable = false)
