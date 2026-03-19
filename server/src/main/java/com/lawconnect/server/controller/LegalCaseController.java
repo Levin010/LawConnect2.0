@@ -47,6 +47,14 @@ public class LegalCaseController {
     }
 
     @PreAuthorize("hasRole('ADVOCATE')")
+    @PutMapping("/{caseId}/reopen")
+    public ResponseEntity<LegalCase> reopenCase(
+            Principal principal,
+            @PathVariable String caseId) {
+        return ResponseEntity.ok(legalCaseService.reopenCase(caseId, principal.getName()));
+    }
+
+    @PreAuthorize("hasRole('ADVOCATE')")
     @GetMapping("/my-cases")
     public ResponseEntity<List<LegalCase>> getAdvocateCases(Principal principal) {
         return ResponseEntity.ok(legalCaseService.getCasesByAdvocate(principal.getName()));

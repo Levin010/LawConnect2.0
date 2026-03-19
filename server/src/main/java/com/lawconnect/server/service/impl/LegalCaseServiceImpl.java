@@ -75,6 +75,19 @@ public class LegalCaseServiceImpl implements LegalCaseService {
     }
 
     @Override
+    public LegalCase reopenCase(String caseId, String advocateUsername) {
+        LegalCase legalCase = legalCaseRepository.findById(caseId)
+                .orElseThrow(() -> new RuntimeException("Case not found"));
+
+        if (!legalCase.getAdvocate().getUsername().equals(advocateUsername)) {
+            throw new RuntimeException("Unauthorized to reopen this case");
+        }
+
+        legalCase.setStatus(CaseStatus.OPEN);
+        return legalCaseRepository.save(legalCase);
+    }
+
+    @Override
     public List<LegalCase> getCasesByAdvocate(String advocateUsername) {
         User advocate = userRepository.findByUsername(advocateUsername)
                 .orElseThrow(() -> new UsernameNotFoundException("Advocate not found"));

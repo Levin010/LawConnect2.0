@@ -10,6 +10,7 @@ public interface LegalCaseService {
     LegalCase createCase(String advocateUsername, LegalCaseDto dto);
     LegalCase updateCase(String caseId, String advocateUsername, LegalCaseDto dto);
     LegalCase closeCase(String caseId, String advocateUsername);
+    LegalCase reopenCase(String caseId, String advocateUsername);
     List<LegalCase> getCasesByAdvocate(String advocateUsername);
     List<LegalCase> getCasesByClient(String clientUsername);
     LegalCase getCaseById(String caseId);

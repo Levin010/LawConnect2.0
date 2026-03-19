@@ -155,6 +155,14 @@ export const advocateApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Cases'],
     }),
+    reopenCase: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/cases/${id}/reopen`,
+        method: 'PUT',
+        responseHandler: 'text',
+      }),
+      invalidatesTags: ['Cases'],
+    }),
     getCaseUpdates: builder.query<CaseUpdate[], string>({
       query: (caseId) => `/cases/${caseId}/updates`,
       providesTags: ['CaseUpdates'],
@@ -188,14 +196,6 @@ export const advocateApi = baseApi.injectEndpoints({
         url: `/cases/${id}`,
         method: 'PUT',
         body,
-        responseHandler: 'text',
-      }),
-      invalidatesTags: ['Cases'],
-    }),
-    reopenCase: builder.mutation<void, string>({
-      query: (id) => ({
-        url: `/cases/${id}/reopen`,
-        method: 'PUT',
         responseHandler: 'text',
       }),
       invalidatesTags: ['Cases'],
