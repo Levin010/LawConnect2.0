@@ -5,12 +5,14 @@ import { useDispatch } from 'react-redux';
 import { useLoginMutation } from '@/store/api/authApi';
 import { setCredentials } from '@/store/slices/authSlice';
 import { decodeToken } from '@/lib/auth';
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function LoginForm() {
   const dispatch = useDispatch();
   const [login, { isLoading }] = useLoginMutation();
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [errors, setErrors] = useState<{ username?: string; password?: string; general?: string }>({});
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -70,18 +72,29 @@ export default function LoginForm() {
             <label htmlFor={name} className="block text-white/80 text-sm mb-1.5" style={{ fontFamily: 'Georgia, serif' }}>
               {label}
             </label>
-            <input
-              id={name}
-              name={name}
-              type={type}
-              value={formData[name]}
-              onChange={handleChange}
-              placeholder={label}
-              className={`w-full px-4 py-3 rounded-lg bg-white/90 text-gray-900 placeholder-gray-400 text-sm outline-none transition-all border-2 ${
-                errors[name] ? 'border-red-400 focus:border-red-500' : 'border-transparent focus:border-red-700'
-              }`}
-              style={{ fontFamily: 'Georgia, serif' }}
-            />
+            <div className="relative">
+              <input
+                id={name}
+                name={name}
+                type={name === 'password' ? (showPassword ? 'text' : 'password') : type}
+                value={formData[name]}
+                onChange={handleChange}
+                placeholder={label}
+                className={`w-full px-4 py-3 rounded-lg bg-white/90 text-gray-900 placeholder-gray-400 text-sm outline-none transition-all border-2 ${
+                  name === 'password' ? 'pr-11' : ''
+                } ${errors[name] ? 'border-red-400 focus:border-red-500' : 'border-transparent focus:border-red-700'}`}
+                style={{ fontFamily: 'Georgia, serif' }}
+              />
+              {name === 'password' && (
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              )}
+            </div>
             {errors[name] && (
               <p className="mt-1 text-red-300 text-xs" style={{ fontFamily: 'Georgia, serif' }}>{errors[name]}</p>
             )}

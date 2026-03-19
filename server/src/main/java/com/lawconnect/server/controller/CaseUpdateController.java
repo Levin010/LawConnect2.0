@@ -34,7 +34,6 @@ public class CaseUpdateController {
     @PreAuthorize("hasRole('ADVOCATE')")
     @PutMapping(value = "/{updateId}", consumes = "multipart/form-data")
     public ResponseEntity<CaseUpdate> editUpdate(
-            @PathVariable String caseId,
             @PathVariable String updateId,
             Principal principal,
             @RequestPart("title") String title,
@@ -47,7 +46,6 @@ public class CaseUpdateController {
     @PreAuthorize("hasRole('ADVOCATE')")
     @DeleteMapping("/{updateId}")
     public ResponseEntity<?> deleteUpdate(
-            @PathVariable String caseId,
             @PathVariable String updateId,
             Principal principal) {
         caseUpdateService.deleteUpdate(updateId, principal.getName());

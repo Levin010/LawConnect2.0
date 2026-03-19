@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useRegisterMutation } from '@/store/api/authApi';
+import { Eye, EyeOff } from 'lucide-react';
 
 type Role = 'CLIENT' | 'ADVOCATE';
 
@@ -77,12 +78,17 @@ export default function SignupForm() {
   const [formData, setFormData] = useState<FormData>(emptyForm);
   const [errors, setErrors] = useState<FormErrors>({});
   const [successMessage, setSuccessMessage] = useState('');
+  const [showPasswords, setShowPasswords] = useState<{ password: boolean; confirmPassword: boolean }>({
+    password: false,
+    confirmPassword: false,
+  });
 
   const handleTabChange = (newRole: Role) => {
     setRole(newRole);
     setFormData(emptyForm);
     setErrors({});
     setSuccessMessage('');
+    setShowPasswords({ password: false, confirmPassword: false });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -187,21 +193,38 @@ export default function SignupForm() {
             >
               {label}
             </label>
-            <input
-              id={name}
-              name={name}
-              type={type}
-              value={formData[name]}
-              onChange={handleChange}
-              placeholder={label}
-              className={`w-full px-4 py-3 rounded-lg bg-white/90 text-gray-900 placeholder-gray-400 text-sm outline-none transition-all border-2 ${
-                errors[name]
-                  ? 'border-red-400 focus:border-red-500'
-                  : 'border-transparent focus:border-red-700'
-              }`}
-              style={{ fontFamily: 'Georgia, serif' }}
-              autoComplete={name === 'confirmPassword' ? 'new-password' : undefined}
-            />
+            <div className="relative">
+              <input
+                id={name}
+                name={name}
+                type={
+                  name === 'password' || name === 'confirmPassword'
+                    ? showPasswords[name] ? 'text' : 'password'
+                    : type
+                }
+                value={formData[name]}
+                onChange={handleChange}
+                placeholder={label}
+                className={`w-full px-4 py-3 rounded-lg bg-white/90 text-gray-900 placeholder-gray-400 text-sm outline-none transition-all border-2 ${
+                  name === 'password' || name === 'confirmPassword' ? 'pr-11' : ''
+                } ${
+                  errors[name]
+                    ? 'border-red-400 focus:border-red-500'
+                    : 'border-transparent focus:border-red-700'
+                }`}
+                style={{ fontFamily: 'Georgia, serif' }}
+                autoComplete={name === 'confirmPassword' ? 'new-password' : undefined}
+              />
+              {(name === 'password' || name === 'confirmPassword') && (
+                <button
+                  type="button"
+                  onClick={() => setShowPasswords((prev) => ({ ...prev, [name]: !prev[name] }))}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  {showPasswords[name] ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              )}
+            </div>
             {errors[name] && (
               <p className="mt-1 text-red-300 text-xs" style={{ fontFamily: 'Georgia, serif' }}>
                 {errors[name]}
