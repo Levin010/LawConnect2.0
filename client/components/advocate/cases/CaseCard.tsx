@@ -33,7 +33,12 @@ export default function CaseCard({ legalCase }: { legalCase: LegalCase }) {
           )}
           <div className="flex items-center gap-1.5">
             <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider" style={{ fontFamily: 'Georgia, serif' }}>Client Role</span>
-            <span className="text-sm text-gray-600" style={{ fontFamily: 'Georgia, serif' }}>{legalCase.clientRole.replace('_', ' / ')}</span>
+            <span className="text-sm text-gray-600" style={{ fontFamily: 'Georgia, serif' }}>
+              {legalCase.clientRole
+              .replace('_', ' / ')
+              .toLowerCase()
+              .replace(/(^\w|(?<=\/ )\w)/g, (c) => c.toUpperCase())}
+            </span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider" style={{ fontFamily: 'Georgia, serif' }}>Launched</span>

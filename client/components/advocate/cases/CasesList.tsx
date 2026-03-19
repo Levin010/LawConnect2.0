@@ -16,8 +16,12 @@ export default function CasesList() {
     <div className="text-center py-20 text-gray-400 text-sm" style={{ fontFamily: 'Georgia, serif' }}>No cases found.</div>
   );
 
-  const open = cases.filter((c) => c.status === 'OPEN');
-  const closed = cases.filter((c) => c.status === 'CLOSED');
+  const sorted = [...(cases ?? [])].sort(
+    (a, b) => new Date(b.dateLaunched).getTime() - new Date(a.dateLaunched).getTime()
+  );
+
+  const open = sorted.filter((c) => c.status === 'OPEN');
+  const closed = sorted.filter((c) => c.status === 'CLOSED');
 
   return (
     <div className="flex flex-col gap-8">

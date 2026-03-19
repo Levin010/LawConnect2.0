@@ -50,8 +50,13 @@ function RequestCard({
 
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider w-28" style={{ fontFamily: 'Georgia, serif' }}>Party Role</span>
-            <span className="text-sm text-gray-700" style={{ fontFamily: 'Georgia, serif' }}>{request.clientRole.replace('_', ' / ')}</span>
+            <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider w-28" style={{ fontFamily: 'Georgia, serif' }}>Client Role</span>
+            <span className="text-sm text-gray-700" style={{ fontFamily: 'Georgia, serif' }}>
+              {request.clientRole
+              .replace('_', ' / ')
+              .toLowerCase()
+              .replace(/(^\w|(?<=\/ )\w)/g, (c) => c.toUpperCase())}
+              </span>
           </div>
           <div className="flex items-start gap-2">
             <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider w-28 pt-0.5" style={{ fontFamily: 'Georgia, serif' }}>Description</span>

@@ -84,10 +84,16 @@ export default function RepresentationRequest({ advocateUsername }: Props) {
 
         <div>
           <label className="block text-white/70 text-xs mb-1.5 uppercase tracking-wider" style={{ fontFamily: 'Georgia, serif' }}>Your Role</label>
-          <select name="clientRole" value={form.clientRole} onChange={handleChange} className={inputClass} style={{ fontFamily: 'Georgia, serif' }}>
-            <option value="" disabled>Select role</option>
-            <option value="PLAINTIFF_PETITIONER">Plaintiff/Petitioner</option>
-            <option value="DEFENDANT_RESPONDENT">Defendant/Respondent</option>
+          <select
+            name="clientRole"
+            value={form.clientRole}
+            onChange={handleChange}
+            className={inputClass}
+            style={{ fontFamily: 'Georgia, serif', color: form.clientRole ? 'white' : 'rgba(255,255,255,0.5)' }}
+          >
+            <option value="" disabled style={{ color: 'black', backgroundColor: 'white' }}>Select role</option>
+            <option value="PLAINTIFF_PETITIONER" style={{ color: 'black', backgroundColor: 'white' }}>Plaintiff/Petitioner</option>
+            <option value="DEFENDANT_RESPONDENT" style={{ color: 'black', backgroundColor: 'white' }}>Defendant/Respondent</option>
           </select>
         </div>
 

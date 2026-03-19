@@ -167,9 +167,9 @@ export default function LaunchCaseModal({ request, onClose }: Props) {
               <div>
                 <label className={labelClass} style={{ fontFamily: 'Georgia, serif' }}>Client Role</label>
                 <select name="clientRole" value={form.clientRole} onChange={handleChange} className={inputClass} style={{ fontFamily: 'Georgia, serif' }}>
-                  <option value="">Select client role</option>
-                  <option value="PLAINTIFF_PETITIONER">Plaintiff / Petitioner</option>
-                  <option value="DEFENDANT_RESPONDENT">Defendant / Respondent</option>
+                  <option value="" style={{ color: 'black', backgroundColor: 'white' }}>Select client role</option>
+                  <option value="PLAINTIFF_PETITIONER" style={{ color: 'black', backgroundColor: 'white' }}>Plaintiff / Petitioner</option>
+                  <option value="DEFENDANT_RESPONDENT" style={{ color: 'black', backgroundColor: 'white' }}>Defendant / Respondent</option>
                 </select>
                 {errors.clientRole && <p className={errorClass} style={{ fontFamily: 'Georgia, serif' }}>{errors.clientRole}</p>}
               </div>
