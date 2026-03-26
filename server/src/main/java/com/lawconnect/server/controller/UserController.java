@@ -7,6 +7,7 @@ import com.lawconnect.server.model.BlacklistedToken;
 import com.lawconnect.server.model.User;
 import com.lawconnect.server.dto.UserDto;
 import com.lawconnect.server.repository.BlacklistedTokenRepository;
+import com.lawconnect.server.repository.UserRepository;
 import com.lawconnect.server.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -17,11 +18,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -39,6 +43,9 @@ public class UserController {
 
     @Autowired
     private BlacklistedTokenRepository blacklistedTokenRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping("/auth")
     public ResponseEntity<?> generateToken(@RequestBody LoginUser loginUser) throws AuthenticationException {
@@ -97,5 +104,12 @@ public class UserController {
     @GetMapping("/adminping")
     public String adminPing() {
         return "Only Admins Can Read This";
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
+        User user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return ResponseEntity.ok(Map.of("id", user.getId(), "username", user.getUsername()));
     }
 }

@@ -6,6 +6,10 @@ import { useGetCaseByIdQuery, useGetCaseUpdatesQuery, useCloseCaseMutation, useR
 import CaseUpdateModal from './CaseUpdateModal';
 import DocumentRepository from './DocumentRepository';
 import CaseUpdates from './CaseUpdates';
+import { useRouter } from 'next/navigation';
+import { MessageCircle } from 'lucide-react';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
 
 export default function CaseDetail({ caseId }: { caseId: string }) {
   const { data: legalCase, isLoading, isError } = useGetCaseByIdQuery(caseId);
@@ -15,6 +19,8 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
   const [confirmClose, setConfirmClose] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [reopenCase, { isLoading: isReopening }] = useReopenCaseMutation();
+  const router = useRouter();
+  const myUserId = useSelector((state: RootState) => state.auth.userId);
 
   if (isLoading) return (
     <div className="text-center py-20 text-gray-400 text-sm" style={{ fontFamily: 'Georgia, serif' }}>Loading case...</div>
@@ -94,6 +100,17 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
             {/* Actions */}
             <div className="flex flex-wrap gap-3 pt-2 border-t border-gray-100">
             {/* Edit — always visible */}
+
+            {legalCase.client && (
+              <button
+                onClick={() => router.push(`/advocate/chat/${legalCase.client!.id}`)}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border-2 hover:bg-gray-50 transition-colors"
+                style={{ borderColor: '#8B0000', color: '#8B0000', fontFamily: 'Georgia, serif' }}
+              >
+                <MessageCircle className="w-4 h-4" />
+                Chat
+              </button>
+            )}
 
             {legalCase.status === 'OPEN' ? (
                 <>

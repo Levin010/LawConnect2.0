@@ -5,6 +5,7 @@ interface AuthState {
   token: string | null;
   username: string | null;
   role: string | null;
+  userId: string | null;
   isAuthenticated: boolean;
 }
 
@@ -12,6 +13,7 @@ const initialState: AuthState = {
   token: null,
   username: null,
   role: null,
+  userId: null,
   isAuthenticated: false,
 };
 
@@ -32,10 +34,14 @@ const authSlice = createSlice({
       state.username = null;
       state.role = null;
       state.isAuthenticated = false;
+      state.userId = null,
       clearToken();
+    },
+    setUserId(state, action: PayloadAction<string>) {
+      state.userId = action.payload;
     },
   },
 });
 
-export const { setCredentials, logout } = authSlice.actions;
+export const { setCredentials, logout, setUserId } = authSlice.actions;
 export default authSlice.reducer;

@@ -35,7 +35,10 @@ public class WebSecurityConfig {
                 .cors(cors -> cors.configure(http))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/users/auth", "/users/register", "/users/logout", "/profile/advocates", "/profile/advocates/**").permitAll()
+                        .requestMatchers("/users/auth", "/users/register", "/users/logout",
+                                "/profile/advocates", "/profile/advocates/**",
+                                "/ws/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex
