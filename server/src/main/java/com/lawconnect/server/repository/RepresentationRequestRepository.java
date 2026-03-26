@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface RepresentationRequestRepository extends JpaRepository<RepresentationRequest, Long> {
+public interface RepresentationRequestRepository extends JpaRepository<RepresentationRequest, String> {
     List<RepresentationRequest> findByAdvocate(User advocate);
     List<RepresentationRequest> findByClient(User client);
 }

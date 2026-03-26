@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface RepresentationRequestService {
     RepresentationRequest sendRequest(String clientUsername, RepresentationRequestDto dto);
-    RepresentationRequest updateRequestStatus(Long requestId, RequestStatus status, String advocateUsername);
+    RepresentationRequest updateRequestStatus(String requestId, RequestStatus status, String advocateUsername);
     List<RepresentationRequest> getRequestsForAdvocate(String advocateUsername);
     List<RepresentationRequest> getRequestsByClient(String clientUsername);
 }

@@ -3,14 +3,16 @@ package com.lawconnect.server.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.UUID;
+
 @Entity
 @Data
 @Table(name = "advocate_profiles")
 public class AdvocateProfile {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(nullable = false, updatable = false)
+    private String id;
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -45,4 +47,9 @@ public class AdvocateProfile {
 
     @Column(name = "practicing_certificate")
     private String practicingCertificate;
+
+    @PrePersist
+    public void prePersist() {
+        if (id == null) id = UUID.randomUUID().toString();
+    }
 }

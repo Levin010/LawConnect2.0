@@ -44,7 +44,7 @@ public class RepresentationRequestController {
     @PreAuthorize("hasRole('ADVOCATE')")
     @PutMapping("/{requestId}/status")
     public ResponseEntity<RepresentationRequest> updateStatus(
-            @PathVariable Long requestId,
+            @PathVariable String requestId,
             @RequestParam RequestStatus status,
             Principal principal) {
         return ResponseEntity.ok(representationRequestService.updateRequestStatus(requestId, status, principal.getName()));

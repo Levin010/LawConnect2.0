@@ -56,7 +56,7 @@ public class RepresentationRequestServiceImpl implements RepresentationRequestSe
     }
 
     @Override
-    public RepresentationRequest updateRequestStatus(Long requestId, RequestStatus status, String advocateUsername) {
+    public RepresentationRequest updateRequestStatus(String requestId, RequestStatus status, String advocateUsername) {
         RepresentationRequest request = representationRequestRepository.findById(requestId)
                 .orElseThrow(() -> new RuntimeException("Request not found"));
 

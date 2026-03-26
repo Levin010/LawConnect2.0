@@ -3,6 +3,7 @@ package com.lawconnect.server.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -10,8 +11,8 @@ import java.time.LocalDateTime;
 public class RepresentationRequest {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(nullable = false, updatable = false)
+    private String id;
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
@@ -43,6 +44,7 @@ public class RepresentationRequest {
 
     @PrePersist
     public void prePersist() {
+        if (id == null) id = UUID.randomUUID().toString();
         requestedAt = LocalDateTime.now();
     }
 }
