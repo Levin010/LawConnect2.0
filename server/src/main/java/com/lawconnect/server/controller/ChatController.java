@@ -32,16 +32,20 @@ public class ChatController {
         // principal.getName() returns the username from the JWT — set by WebSocketAuthInterceptor
         ChatMessageDto saved = chatMessageService.saveMessage(principal.getName(), dto);
 
+        System.out.println("[WS] Routing to senderUsername: " + saved.getSenderUsername());
+        System.out.println("[WS] Routing to receiverUsername: " + saved.getReceiverUsername());
+        System.out.println("[WS] Principal name in session: " + principal.getName());
+
         // Deliver to receiver
         messagingTemplate.convertAndSendToUser(
-                saved.getReceiverId(),
+                saved.getReceiverUsername(),
                 "/queue/messages",
                 saved
         );
 
         // Echo back to sender (supports multiple tabs / devices)
         messagingTemplate.convertAndSendToUser(
-                saved.getSenderId(),
+                saved.getSenderUsername(),
                 "/queue/messages",
                 saved
         );

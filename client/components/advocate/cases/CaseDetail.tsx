@@ -103,7 +103,7 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
 
             {legalCase.client && (
               <button
-                onClick={() => router.push(`/advocate/chat/${legalCase.client!.id}`)}
+                onClick={() => router.push(`/advocate/chat/${legalCase.client!.id}?name=${encodeURIComponent(legalCase.client!.name)}`)}
                 className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border-2 hover:bg-gray-50 transition-colors"
                 style={{ borderColor: '#8B0000', color: '#8B0000', fontFamily: 'Georgia, serif' }}
               >

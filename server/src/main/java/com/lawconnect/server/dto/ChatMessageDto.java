@@ -9,6 +9,8 @@ public class ChatMessageDto {
     private String senderId;
     private String senderName;
     private String receiverId;
+    private String senderUsername;
+    private String receiverUsername;
     private String content;
     private String conversationId;
     private LocalDateTime sentAt;

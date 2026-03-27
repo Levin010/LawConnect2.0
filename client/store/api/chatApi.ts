@@ -6,9 +6,12 @@ export interface CurrentUser {
 }
 
 export interface ChatMessageDto {
-  id: string;
+  messageId: string;
   senderId: string;
+  senderName: string;
+  senderUsername: string;
   receiverId: string;
+  receiverUsername: string;
   content: string;
   sentAt: string;
   read: boolean;
