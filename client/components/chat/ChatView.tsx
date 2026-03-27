@@ -6,6 +6,7 @@ import { ArrowLeft, Send } from 'lucide-react';
 import { useGetConversationQuery, useMarkAsReadMutation, ChatMessageDto } from '@/store/api/chatApi';
 import { useChat } from '@/hooks/useChat';
 import { v4 as uuidv4 } from 'uuid';
+import { Hourglass, Check, CheckCheck } from 'lucide-react';
 
 interface Props {
   myUserId: string;
@@ -14,11 +15,15 @@ interface Props {
   otherUserName: string;
 }
 
+type UIMessage = ChatMessageDto & {
+  status?: 'sending' | 'sent';
+};
+
 export default function ChatView({ myUserId, myUsername, otherUserId, otherUserName }: Props) {
   const router = useRouter();
   const { data: history, isLoading } = useGetConversationQuery(otherUserId);
   const [markAsRead] = useMarkAsReadMutation();
-  const [messages, setMessages] = useState<ChatMessageDto[]>([]);
+  const [messages, setMessages] = useState<UIMessage[]>([]);
   const [input, setInput] = useState('');
   const bottomRef = useRef<HTMLDivElement>(null);
   const markedRef = useRef<string | null>(null);
@@ -52,7 +57,7 @@ export default function ChatView({ myUserId, myUsername, otherUserId, otherUserN
         // If real message already exists → skip
         if (prev.find((m) => m.messageId === msg.messageId)) return prev;
 
-        // 🔥 Replace matching temp message
+        // Replace matching temp message
         const index = prev.findIndex(
             (m) =>
             m.messageId.startsWith('temp-') &&
@@ -63,12 +68,15 @@ export default function ChatView({ myUserId, myUsername, otherUserId, otherUserN
 
         if (index !== -1) {
             const updated = [...prev];
-            updated[index] = msg; // replace temp with real
+            updated[index] = {
+            ...msg,
+            status: 'sent',
+            }; // replace temp with real
             return updated;
         }
 
         // Otherwise just append
-        return [...prev, msg];
+        return [...prev, { ...msg, status: 'sent' }];
         });
     }
   };
@@ -90,7 +98,7 @@ export default function ChatView({ myUserId, myUsername, otherUserId, otherUserN
 
     const tempId = `temp-${uuidv4()}`;
 
-    const tempMessage: ChatMessageDto = {
+    const tempMessage: UIMessage = {
         messageId: tempId,
         senderId: myUserId,
         senderName: '', // optional
@@ -101,6 +109,7 @@ export default function ChatView({ myUserId, myUsername, otherUserId, otherUserN
         conversationId: '', // will be replaced
         sentAt: new Date().toISOString(),
         read: false,
+        status: 'sending',
     };
 
     // Optimistic UI update
@@ -163,8 +172,16 @@ export default function ChatView({ myUserId, myUsername, otherUserId, otherUserN
                 style={{ backgroundColor: isMine ? '#8B0000' : undefined, fontFamily: 'Georgia, serif' }}
               >
                 <p>{msg.content}</p>
-                <p className={`text-xs mt-1 ${isMine ? 'text-white/60' : 'text-gray-400'} text-right`}>
-                  {formatTime(msg.sentAt)}
+                <p className={`text-xs mt-1 flex items-center justify-end gap-1 ${isMine ? 'text-white/60' : 'text-gray-400'}`}>
+                {formatTime(msg.sentAt)}
+
+                {isMine && (
+                    <span className="flex items-center">
+                    {msg.status === 'sending' && <Hourglass className="w-3 h-3 opacity-70 animate-spin" />}
+                    {msg.status === 'sent' && !msg.read && <Check className="w-3 h-3" />}
+                    {msg.read && <CheckCheck className="w-3 h-3 text-blue-400" />}
+                    </span>
+                )}
                 </p>
               </div>
             </div>

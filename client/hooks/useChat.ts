@@ -21,7 +21,6 @@ export function useChat({ myUserId, myUsername, onMessage, enabled }: UseChatOpt
 
   const sendMessage = useCallback((receiverId: string, content: string) => {
     if (!clientRef.current?.connected) return;
-    console.log('[STOMP] Publishing message to receiverId:', receiverId);
     clientRef.current.publish({
         destination: '/app/chat.send',
         body: JSON.stringify({ receiverId, content }),
@@ -41,9 +40,7 @@ export function useChat({ myUserId, myUsername, onMessage, enabled }: UseChatOpt
       },
       reconnectDelay: 5000,
       onConnect: () => {
-        console.log('[STOMP] Connected. Subscribing as username:', myUsername);
         client.subscribe(`/user/queue/messages`, (msg: IMessage) => {
-            console.log('[STOMP] Raw message received:', msg.body);
             try {
             const parsed: ChatMessageDto = JSON.parse(msg.body);
             onMessageRef.current(parsed);
