@@ -1,4 +1,5 @@
 import { baseApi } from './baseApi';
+import { LegalCase } from './advocateApi';
 
 export interface DashboardStats {
   totalCases: number;
@@ -107,6 +108,10 @@ export const clientApi = baseApi.injectEndpoints({
     query: () => '/representation-requests/my-requests',
     providesTags: ['Requests'],
     }),
+    getClientCases: builder.query<LegalCase[], void>({
+      query: () => '/cases/my-cases/client',
+      providesTags: ['Cases'],
+    }),
   }),
 });
 
@@ -119,4 +124,5 @@ export const {
     useGetAdvocateReviewsQuery,
     usePostReviewMutation,
     useGetSentRequestsQuery,
+    useGetClientCasesQuery,
  } = clientApi;

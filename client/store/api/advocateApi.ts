@@ -73,6 +73,7 @@ export interface LegalCase {
   status: 'OPEN' | 'CLOSED';
   dateLaunched: string;
   client: { id: number; name: string; username: string } | null;
+  advocate: { id: number; name: string; username: string } | null;
 }
 
 export interface CaseUpdate {
