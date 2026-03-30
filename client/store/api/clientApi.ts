@@ -112,6 +112,10 @@ export const clientApi = baseApi.injectEndpoints({
       query: () => '/cases/my-cases/client',
       providesTags: ['Cases'],
     }),
+    getCaseById: builder.query<LegalCase, string>({
+      query: (id) => `/cases/${id}`,
+      providesTags: ['Cases'],
+    }),
   }),
 });
 
@@ -125,4 +129,5 @@ export const {
     usePostReviewMutation,
     useGetSentRequestsQuery,
     useGetClientCasesQuery,
+    useGetCaseByIdQuery,
  } = clientApi;

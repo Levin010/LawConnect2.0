@@ -1,9 +1,9 @@
 'use client';
 
-import { useGetClientOpenCasesQuery } from '@/store/api/clientApi';
+import { useGetClientCasesQuery } from '@/store/api/clientApi';
 
 export default function OpenCasesTable() {
-  const { data: cases, isLoading, isError } = useGetClientOpenCasesQuery();
+  const { data: cases, isLoading, isError } = useGetClientCasesQuery();
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
@@ -51,10 +51,10 @@ export default function OpenCasesTable() {
               {cases.map((c, i) => (
                 <tr key={c.id} className={`hover:bg-gray-50 transition-colors ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}>
                   <td className="px-6 py-4 text-sm text-gray-600 whitespace-nowrap" style={{ fontFamily: 'Georgia, serif' }}>
-                    {new Date(c.dateOpened).toLocaleDateString('en-KE', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    {new Date(c.dateLaunched).toLocaleDateString('en-KE', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </td>
                   <td className="px-6 py-4 text-sm font-medium text-gray-800" style={{ fontFamily: 'Georgia, serif' }}>
-                    {c.advocateName}
+                    {c.advocate?.name}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600" style={{ fontFamily: 'Georgia, serif' }}>
                     {c.caseName}
