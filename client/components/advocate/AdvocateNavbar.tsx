@@ -146,8 +146,8 @@ export default function AdvocateNavbar() {
               </Link>
             ))}
           </div>
-          <Link href="/advocate/appointments" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
-            Appointments
+          <Link href="/advocate/chats" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
+            Chats
           </Link>
           <Link href="/advocate/bills" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
             Client Bills

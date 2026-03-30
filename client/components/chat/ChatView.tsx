@@ -163,6 +163,9 @@ export default function ChatView({ myUserId, myUsername, otherUserId, otherUserN
         )}
         {messages.map((msg) => {
           const isMine = msg.senderId === myUserId;
+          const isSending = msg.messageId.startsWith('temp-') || msg.status === 'sending';
+          const isRead = msg.read;
+          const isSent = isMine && !isSending;
           return (
             <div key={msg.messageId} className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
               <div
@@ -177,9 +180,9 @@ export default function ChatView({ myUserId, myUsername, otherUserId, otherUserN
 
                 {isMine && (
                     <span className="flex items-center">
-                    {msg.status === 'sending' && <Hourglass className="w-3 h-3 opacity-70 animate-spin" />}
-                    {msg.status === 'sent' && !msg.read && <Check className="w-3 h-3" />}
-                    {msg.read && <CheckCheck className="w-3 h-3 text-blue-400" />}
+                    {isSending && <Hourglass className="w-3 h-3 opacity-70 animate-spin" />}
+                    {isSent && !isRead && <Check className="w-3 h-3" />}
+                    {isSent && isRead && <CheckCheck className="w-3 h-3 text-blue-400" />}
                     </span>
                 )}
                 </p>

@@ -74,11 +74,11 @@ export default function RepresentationRequest({ advocateUsername }: Props) {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-white/70 text-xs mb-1.5 uppercase tracking-wider" style={{ fontFamily: 'Georgia, serif' }}>First Name</label>
-            <input name="firstName" value={form.firstName} onChange={handleChange} placeholder="First name" className={inputClass} style={{ fontFamily: 'Georgia, serif' }} />
+            <input name="firstName" value={form.firstName} onChange={handleChange} placeholder="Official first name" className={inputClass} style={{ fontFamily: 'Georgia, serif' }} />
           </div>
           <div>
             <label className="block text-white/70 text-xs mb-1.5 uppercase tracking-wider" style={{ fontFamily: 'Georgia, serif' }}>Last Name</label>
-            <input name="lastName" value={form.lastName} onChange={handleChange} placeholder="Last name" className={inputClass} style={{ fontFamily: 'Georgia, serif' }} />
+            <input name="lastName" value={form.lastName} onChange={handleChange} placeholder="Official last name" className={inputClass} style={{ fontFamily: 'Georgia, serif' }} />
           </div>
         </div>
 

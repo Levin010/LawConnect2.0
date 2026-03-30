@@ -161,7 +161,7 @@ export default function Navbar() {
                   </Link>
                 ))}
               </div>
-              <Link href="/client/appointments" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>Appointments</Link>
+              <Link href="/client/chats" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>Chats</Link>
               <Link href="/client/bills" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>My Bills</Link>
             </>
           )}
