@@ -3,5 +3,5 @@ import { use } from 'react';
 
 export default function Page({ params }: { params: Promise<{ userId: string }> }) {
     const { userId } = use(params);
-  return <ChatPage otherUserId={userId} otherUserRole="Client" />;
+  return <ChatPage otherUserId={userId} otherUserRole="Advocate" />;
 }

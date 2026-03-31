@@ -22,8 +22,8 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, String
     @Query("UPDATE ChatMessage m SET m.read = true " +
             "WHERE m.conversationId = :conversationId " +
             "AND m.receiver.id = :userId AND m.read = false")
-    void markConversationAsRead(@Param("conversationId") String conversationId,
-                                @Param("userId") String userId);
+    int markConversationAsRead(@Param("conversationId") String conversationId,
+                               @Param("userId") String userId);
 
     @Query("SELECT DISTINCT m.conversationId FROM ChatMessage m " +
             "WHERE m.sender.id = :userId OR m.receiver.id = :userId")

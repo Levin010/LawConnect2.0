@@ -1,6 +1,7 @@
 package com.lawconnect.server.controller;
 
 import com.lawconnect.server.dto.ChatMessageDto;
+import com.lawconnect.server.dto.ReadReceiptDto;
 import com.lawconnect.server.repository.UserRepository;
 import com.lawconnect.server.service.ChatMessageService;
 import lombok.RequiredArgsConstructor;
@@ -76,8 +77,31 @@ public class ChatController {
     public void markAsRead(
             @PathVariable String conversationId,
             @AuthenticationPrincipal UserDetails userDetails) {
+
         String myUserId = extractUserId(userDetails);
-        chatMessageService.markConversationAsRead(conversationId, myUserId);
+
+        System.out.println("[READ] markAsRead called");
+        System.out.println("[READ] conversationId = " + conversationId);
+        System.out.println("[READ] myUserId = " + myUserId);
+        System.out.println("[READ] username = " + userDetails.getUsername());
+
+        int updatedCount = chatMessageService.markConversationAsRead(conversationId, myUserId);
+
+        if (updatedCount > 0) {
+            String otherUsername = chatMessageService.getOtherParticipantUsername(conversationId, myUserId);
+
+            System.out.println("[READ] sending receipt to otherUsername = " + otherUsername);
+
+            messagingTemplate.convertAndSendToUser(
+                    otherUsername,
+                    "/queue/read-receipts",
+                    new ReadReceiptDto(conversationId, myUserId)
+            );
+
+            System.out.println("[READ] read receipt sent");
+        } else {
+            System.out.println("[READ] no unread messages updated, no receipt sent");
+        }
     }
 
     /**

@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Send } from 'lucide-react';
 import { useGetConversationQuery, useMarkAsReadMutation, ChatMessageDto } from '@/store/api/chatApi';
-import { useChat } from '@/hooks/useChat';
+import { useChat, ReadReceiptDto } from '@/hooks/useChat';
 import { v4 as uuidv4 } from 'uuid';
 import { Hourglass, Check, CheckCheck } from 'lucide-react';
 
@@ -13,13 +13,14 @@ interface Props {
   myUsername: string;
   otherUserId: string;
   otherUserName: string;
+  otherUserRole?: string;
 }
 
 type UIMessage = ChatMessageDto & {
   status?: 'sending' | 'sent';
 };
 
-export default function ChatView({ myUserId, myUsername, otherUserId, otherUserName }: Props) {
+export default function ChatView({ myUserId, myUsername, otherUserId, otherUserName, otherUserRole = 'User', }: Props) {
   const router = useRouter();
   const { data: history, isLoading } = useGetConversationQuery(otherUserId);
   const [markAsRead] = useMarkAsReadMutation();
@@ -32,15 +33,38 @@ export default function ChatView({ myUserId, myUsername, otherUserId, otherUserN
     if (history) setMessages(history);
   }, [history]);
 
+  // useEffect(() => {
+  //   if (messages.length > 0) {
+  //     const conversationId = messages[0].conversationId;
+  //     if (markedRef.current !== conversationId) {
+  //       markedRef.current = conversationId;
+  //       markAsRead(conversationId);
+  //     }
+  //   }
+  // }, [messages]);
+
   useEffect(() => {
-    if (messages.length > 0) {
-      const conversationId = messages[0].conversationId;
-      if (markedRef.current !== conversationId) {
-        markedRef.current = conversationId;
-        markAsRead(conversationId);
-      }
+    const conversationId = messages.find((m) => m.conversationId)?.conversationId;
+
+    if (!conversationId) return;
+
+    const hasUnreadIncoming = messages.some(
+      (m) =>
+        m.conversationId === conversationId &&
+        m.senderId === otherUserId &&
+        m.receiverId === myUserId &&
+        !m.read
+    );
+
+    console.log('[READ] effect fired');
+    console.log('[READ] conversationId:', conversationId);
+    console.log('[READ] hasUnreadIncoming:', hasUnreadIncoming);
+
+    if (hasUnreadIncoming) {
+      console.log('[READ] calling markAsRead for conversation:', conversationId);
+      markAsRead(conversationId);
     }
-  }, [messages]);
+  }, [messages, myUserId, otherUserId, markAsRead]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -84,11 +108,39 @@ export default function ChatView({ myUserId, myUsername, otherUserId, otherUserN
   const handleMessage = useCallback((msg: ChatMessageDto) => {
     onMessageRef.current(msg);
   }, []);
+  
+  // const handleReadReceipt = useCallback((receipt: ReadReceiptDto) => {
+  //   setMessages((prev) =>
+  //     prev.map((m) =>
+  //       m.conversationId === receipt.conversationId && m.senderId === myUserId
+  //         ? { ...m, read: true }
+  //         : m
+  //     )
+  //   );
+  // }, [myUserId]);
+
+  const handleReadReceipt = useCallback((receipt: ReadReceiptDto) => {
+  console.log('[READ] handleReadReceipt called with:', receipt);
+
+  setMessages((prev) => {
+    const updated = prev.map((m) =>
+      m.conversationId === receipt.conversationId && m.senderId === myUserId
+        ? { ...m, read: true }
+        : m
+    );
+
+    console.log('[READ] messages before update:', prev);
+    console.log('[READ] messages after update:', updated);
+
+    return updated;
+  });
+}, [myUserId]);
 
   const { sendMessage } = useChat({
     myUserId,
     myUsername,
     onMessage: handleMessage,
+    onReadReceipt: handleReadReceipt,
     enabled: true, // always true — component only mounts when IDs are ready
   });
 
@@ -145,7 +197,9 @@ export default function ChatView({ myUserId, myUsername, otherUserId, otherUserN
         </div>
         <div>
           <p className="text-white font-semibold text-sm" style={{ fontFamily: 'Georgia, serif' }}>{otherUserName}</p>
-          <p className="text-white/60 text-xs" style={{ fontFamily: 'Georgia, serif' }}>Client</p>
+          <p className="text-white/60 text-xs" style={{ fontFamily: 'Georgia, serif' }}>
+            {otherUserRole}
+          </p>
         </div>
       </div>
 
@@ -166,11 +220,20 @@ export default function ChatView({ myUserId, myUsername, otherUserId, otherUserN
           const isSending = msg.messageId.startsWith('temp-') || msg.status === 'sending';
           const isRead = msg.read;
           const isSent = isMine && !isSending;
+
+          console.log('[RENDER] msg:', {
+            id: msg.messageId,
+            content: msg.content,
+            senderId: msg.senderId,
+            receiverId: msg.receiverId,
+            conversationId: msg.conversationId,
+            read: msg.read,
+          });
           return (
             <div key={msg.messageId} className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
               <div
                 className={`max-w-[75%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
-                  isMine ? 'text-white rounded-br-sm' : 'bg-white text-gray-800 rounded-bl-sm shadow-sm'
+                  isMine ? 'text-white rounded-br-sm' : 'bg-white text-gray-800 rounded-bl-sm shadow-sm border border-red-300'
                 }`}
                 style={{ backgroundColor: isMine ? '#8B0000' : undefined, fontFamily: 'Georgia, serif' }}
               >
