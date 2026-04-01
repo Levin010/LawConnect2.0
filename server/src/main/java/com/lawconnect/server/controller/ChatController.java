@@ -33,10 +33,6 @@ public class ChatController {
         // principal.getName() returns the username from the JWT — set by WebSocketAuthInterceptor
         ChatMessageDto saved = chatMessageService.saveMessage(principal.getName(), dto);
 
-        System.out.println("[WS] Routing to senderUsername: " + saved.getSenderUsername());
-        System.out.println("[WS] Routing to receiverUsername: " + saved.getReceiverUsername());
-        System.out.println("[WS] Principal name in session: " + principal.getName());
-
         // Deliver to receiver
         messagingTemplate.convertAndSendToUser(
                 saved.getReceiverUsername(),
@@ -80,25 +76,16 @@ public class ChatController {
 
         String myUserId = extractUserId(userDetails);
 
-        System.out.println("[READ] markAsRead called");
-        System.out.println("[READ] conversationId = " + conversationId);
-        System.out.println("[READ] myUserId = " + myUserId);
-        System.out.println("[READ] username = " + userDetails.getUsername());
-
         int updatedCount = chatMessageService.markConversationAsRead(conversationId, myUserId);
 
         if (updatedCount > 0) {
             String otherUsername = chatMessageService.getOtherParticipantUsername(conversationId, myUserId);
-
-            System.out.println("[READ] sending receipt to otherUsername = " + otherUsername);
 
             messagingTemplate.convertAndSendToUser(
                     otherUsername,
                     "/queue/read-receipts",
                     new ReadReceiptDto(conversationId, myUserId)
             );
-
-            System.out.println("[READ] read receipt sent");
         } else {
             System.out.println("[READ] no unread messages updated, no receipt sent");
         }

@@ -54,14 +54,8 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
     @Override
     public int markConversationAsRead(String conversationId, String receiverId) {
-        System.out.println("[READ] markConversationAsRead service called");
-        System.out.println("[READ] conversationId = " + conversationId);
-        System.out.println("[READ] receiverId = " + receiverId);
 
         int updatedCount = chatMessageRepository.markConversationAsRead(conversationId, receiverId);
-
-        System.out.println("[READ] updated rows = " + updatedCount);
-        System.out.println("[READ] markConversationAsRead service finished");
 
         return updatedCount;
     }
@@ -84,13 +78,8 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
     @Override
     public String getOtherParticipantUsername(String conversationId, String myUserId) {
-        System.out.println("[READ] getOtherParticipantUsername called");
-        System.out.println("[READ] conversationId = " + conversationId);
-        System.out.println("[READ] myUserId = " + myUserId);
 
         String[] ids = conversationId.split("_");
-
-        System.out.println("[READ] split ids = " + java.util.Arrays.toString(ids));
 
         if (ids.length != 2) {
             throw new RuntimeException("Invalid conversation id: " + conversationId);
@@ -98,12 +87,8 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
         String otherUserId = ids[0].equals(myUserId) ? ids[1] : ids[0];
 
-        System.out.println("[READ] resolved otherUserId = " + otherUserId);
-
         User otherUser = userRepository.findById(otherUserId)
                 .orElseThrow(() -> new RuntimeException("User not found: " + otherUserId));
-
-        System.out.println("[READ] resolved otherUsername = " + otherUser.getUsername());
 
         return otherUser.getUsername();
     }

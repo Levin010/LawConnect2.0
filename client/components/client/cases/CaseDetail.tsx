@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import { MessageCircle } from 'lucide-react';
 
 export default function CaseDetail({ caseId }: { caseId: string }) {
-    console.log('CaseDetail caseId:', caseId);
   const { data: legalCase, isLoading, isError } = useGetCaseByIdQuery(caseId);
   const router = useRouter();
 

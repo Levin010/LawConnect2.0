@@ -23,8 +23,6 @@ export default function CasesList() {
   const open = sorted.filter((c) => c.status === 'OPEN');
   const closed = sorted.filter((c) => c.status === 'CLOSED');
 
-  console.log('cases:', cases);
-
   return (
     <div className="flex flex-col gap-8">
       {open.length > 0 && (

@@ -56,12 +56,7 @@ export default function ChatView({ myUserId, myUsername, otherUserId, otherUserN
         !m.read
     );
 
-    console.log('[READ] effect fired');
-    console.log('[READ] conversationId:', conversationId);
-    console.log('[READ] hasUnreadIncoming:', hasUnreadIncoming);
-
     if (hasUnreadIncoming) {
-      console.log('[READ] calling markAsRead for conversation:', conversationId);
       markAsRead(conversationId);
     }
   }, [messages, myUserId, otherUserId, markAsRead]);
@@ -120,7 +115,6 @@ export default function ChatView({ myUserId, myUsername, otherUserId, otherUserN
   // }, [myUserId]);
 
   const handleReadReceipt = useCallback((receipt: ReadReceiptDto) => {
-  console.log('[READ] handleReadReceipt called with:', receipt);
 
   setMessages((prev) => {
     const updated = prev.map((m) =>
@@ -128,9 +122,6 @@ export default function ChatView({ myUserId, myUsername, otherUserId, otherUserN
         ? { ...m, read: true }
         : m
     );
-
-    console.log('[READ] messages before update:', prev);
-    console.log('[READ] messages after update:', updated);
 
     return updated;
   });
@@ -221,14 +212,6 @@ export default function ChatView({ myUserId, myUsername, otherUserId, otherUserN
           const isRead = msg.read;
           const isSent = isMine && !isSending;
 
-          console.log('[RENDER] msg:', {
-            id: msg.messageId,
-            content: msg.content,
-            senderId: msg.senderId,
-            receiverId: msg.receiverId,
-            conversationId: msg.conversationId,
-            read: msg.read,
-          });
           return (
             <div key={msg.messageId} className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
               <div

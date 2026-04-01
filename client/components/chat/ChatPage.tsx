@@ -16,9 +16,6 @@ export default function ChatPage({ otherUserId, otherUserRole = 'User' }: Props)
   const searchParams = useSearchParams();
   const otherUserName = searchParams.get('name') ?? 'User';
 
-  console.log('myUserId:', myUserId);
-  console.log('myUsername:', myUsername);
-
   if (!myUserId || !myUsername) return (
     <div className="flex items-center justify-center h-screen text-gray-400 text-sm" style={{ fontFamily: 'Georgia, serif' }}>
       Loading...
