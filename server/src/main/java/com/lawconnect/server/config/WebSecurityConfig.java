@@ -36,6 +36,7 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        System.out.println("[SECURITY] SecurityFilterChain initialized");
         http
                 .cors(cors -> cors.configure(http))
                 .csrf(csrf -> csrf.disable())
@@ -72,6 +73,10 @@ public class WebSecurityConfig {
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
+
+        System.out.println("[CORS] allowed origins = " + configuration.getAllowedOriginPatterns());
+        System.out.println("[CORS] allowed methods = " + configuration.getAllowedMethods());
+        System.out.println("[CORS] allow credentials = " + configuration.getAllowCredentials());
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

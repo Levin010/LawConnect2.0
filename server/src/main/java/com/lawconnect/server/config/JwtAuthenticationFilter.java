@@ -37,6 +37,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
+        System.out.println("[JWT] doFilterInternal path = " + req.getServletPath());
+        System.out.println("[JWT] method = " + req.getMethod());
+        System.out.println("[JWT] origin = " + req.getHeader("Origin"));
+        System.out.println("[JWT] auth header present = " + (req.getHeader(HEADER_STRING) != null));
+
         String header = req.getHeader(HEADER_STRING);
         String username = null;
         String authToken = null;
@@ -46,6 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             try {
                 username = jwtTokenUtil.getUsernameFromToken(authToken);
+                System.out.println("[JWT] extracted username = " + username);
             } catch (IllegalArgumentException e) {
                 logger.error("Error occurred while retrieving Username from Token", e);
             } catch (ExpiredJwtException e) {
@@ -59,6 +65,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             if (blacklistedTokenRepository.existsByToken(authToken)) {
+                System.out.println("[JWT] token is blacklisted");
                 chain.doFilter(req, res);
                 return;
             }
@@ -79,6 +86,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
-        return path.startsWith("/ws");
+        boolean skip = path.startsWith("/ws");
+
+        System.out.println("[JWT] shouldNotFilter path = " + path);
+        System.out.println("[JWT] shouldNotFilter skip = " + skip);
+
+        return skip;
     }
 }
