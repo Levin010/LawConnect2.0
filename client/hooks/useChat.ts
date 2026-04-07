@@ -42,7 +42,7 @@ export function useChat({ myUserId, myUsername, onMessage, onReadReceipt, enable
     const wsUrl = process.env.NEXT_PUBLIC_WS_URL ?? 'http://localhost:8080/ws';
 
     const client = new Client({
-      webSocketFactory: () => new SockJS(wsUrl),
+      brokerURL: process.env.NEXT_PUBLIC_WS_URL?.replace('http', 'ws'),
       connectHeaders: {
         Authorization: `Bearer ${token}`,
       },
