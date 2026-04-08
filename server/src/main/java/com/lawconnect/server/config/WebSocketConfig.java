@@ -22,14 +22,21 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setUserDestinationPrefix("/user");
     }
 
+    public WebSocketConfig() {
+        System.out.println("[WS-CONFIG] WebSocketConfig loaded");
+    }
+
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        System.out.println("[WS-CONFIG] Registering STOMP endpoint /ws");
-        System.out.println("[WS-CONFIG] Native WebSocket only, no SockJS");
+        System.out.println("[WS-CONFIG] registerStompEndpoints called");
+        System.out.println("[WS-CONFIG] allowing origin = https://law-connect2-0.vercel.app");
 
         registry.addEndpoint("/ws")
-                .addInterceptors(new WsHandshakeLoggingInterceptor())
-                .setAllowedOriginPatterns("*");
+                .setAllowedOrigins(
+                        "https://law-connect2-0.vercel.app",
+                        "http://localhost:3000"
+                )
+                .addInterceptors(new WsHandshakeLoggingInterceptor());
     }
 
     @Override
