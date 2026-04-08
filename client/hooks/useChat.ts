@@ -47,8 +47,11 @@ export function useChat({ myUserId, myUsername, onMessage, onReadReceipt, enable
         Authorization: `Bearer ${token}`,
       },
       reconnectDelay: 5000,
+      debug: (str) => {
+        console.log('[STOMP DEBUG]', str);
+      },
       onConnect: () => {
-
+        console.log('[STOMP] Connected');
         client.subscribe('/user/queue/messages', (msg: IMessage) => {
           try {
             const parsed: ChatMessageDto = JSON.parse(msg.body);
@@ -69,6 +72,16 @@ export function useChat({ myUserId, myUsername, onMessage, onReadReceipt, enable
       },
       onStompError: (frame) => {
         console.error('STOMP error', frame);
+      },
+      onWebSocketClose: (event) => {
+        console.error('[STOMP] WebSocket closed', {
+          code: event.code,
+          reason: event.reason,
+          wasClean: event.wasClean,
+        });
+      },
+      onWebSocketError: (event) => {
+        console.error('[STOMP] WebSocket error', event);
       },
     });
 

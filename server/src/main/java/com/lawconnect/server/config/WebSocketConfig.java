@@ -24,7 +24,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+        System.out.println("[WS-CONFIG] Registering STOMP endpoint /ws");
+        System.out.println("[WS-CONFIG] Native WebSocket only, no SockJS");
+
         registry.addEndpoint("/ws")
+                .addInterceptors(new WsHandshakeLoggingInterceptor())
                 .setAllowedOriginPatterns("*");
     }
 
