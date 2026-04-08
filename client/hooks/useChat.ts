@@ -74,11 +74,19 @@ export function useChat({ myUserId, myUsername, onMessage, onReadReceipt, enable
         console.error('STOMP error', frame);
       },
       onWebSocketClose: (event) => {
-        console.error('[STOMP] WebSocket closed', {
-          code: event.code,
-          reason: event.reason,
-          wasClean: event.wasClean,
-        });
+        if (event.code !== 1000) {
+          console.error('[STOMP] WebSocket closed unexpectedly', {
+            code: event.code,
+            reason: event.reason,
+            wasClean: event.wasClean,
+          });
+        } else {
+          console.log('[STOMP] WebSocket closed normally', {
+            code: event.code,
+            reason: event.reason,
+            wasClean: event.wasClean,
+          });
+        }
       },
       onWebSocketError: (event) => {
         console.error('[STOMP] WebSocket error', event);
