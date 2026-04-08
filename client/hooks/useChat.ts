@@ -1,6 +1,5 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { Client, IMessage } from '@stomp/stompjs';
-import SockJS from 'sockjs-client';
 import { getToken } from '@/lib/auth';
 import { ChatMessageDto } from '@/store/api/chatApi';
 
@@ -46,7 +45,7 @@ export function useChat({ myUserId, myUsername, onMessage, onReadReceipt, enable
       connectHeaders: {
         Authorization: `Bearer ${token}`,
       },
-      reconnectDelay: 5000,
+      reconnectDelay: 0,
       debug: (str) => {
         console.log('[STOMP DEBUG]', str);
       },
@@ -92,6 +91,9 @@ export function useChat({ myUserId, myUsername, onMessage, onReadReceipt, enable
         console.error('[STOMP] WebSocket error', event);
       },
     });
+
+    console.log('RAW NEXT_PUBLIC_WS_URL =', process.env.NEXT_PUBLIC_WS_URL);
+    console.log('FINAL brokerURL =', process.env.NEXT_PUBLIC_WS_URL?.replace(/^http/, 'ws'));
 
     client.activate();
     clientRef.current = client;

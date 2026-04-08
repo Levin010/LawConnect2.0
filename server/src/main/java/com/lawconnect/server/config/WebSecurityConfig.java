@@ -43,7 +43,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/users/auth", "/users/register", "/users/logout",
                                 "/profile/advocates", "/profile/advocates/**",
-                                "/ws/**"
+                                "/ws", "/ws/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
