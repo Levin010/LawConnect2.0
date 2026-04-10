@@ -46,11 +46,7 @@ export function useChat({ myUserId, myUsername, onMessage, onReadReceipt, enable
         Authorization: `Bearer ${token}`,
       },
       reconnectDelay: 0,
-      debug: (str) => {
-        console.log('[STOMP DEBUG]', str);
-      },
       onConnect: () => {
-        console.log('[STOMP] Connected');
         client.subscribe('/user/queue/messages', (msg: IMessage) => {
           try {
             const parsed: ChatMessageDto = JSON.parse(msg.body);
@@ -72,28 +68,7 @@ export function useChat({ myUserId, myUsername, onMessage, onReadReceipt, enable
       onStompError: (frame) => {
         console.error('STOMP error', frame);
       },
-      onWebSocketClose: (event) => {
-        if (event.code !== 1000) {
-          console.error('[STOMP] WebSocket closed unexpectedly', {
-            code: event.code,
-            reason: event.reason,
-            wasClean: event.wasClean,
-          });
-        } else {
-          console.log('[STOMP] WebSocket closed normally', {
-            code: event.code,
-            reason: event.reason,
-            wasClean: event.wasClean,
-          });
-        }
-      },
-      onWebSocketError: (event) => {
-        console.error('[STOMP] WebSocket error', event);
-      },
     });
-
-    console.log('RAW NEXT_PUBLIC_WS_URL =', process.env.NEXT_PUBLIC_WS_URL);
-    console.log('FINAL brokerURL =', process.env.NEXT_PUBLIC_WS_URL?.replace(/^http/, 'ws'));
 
     client.activate();
     clientRef.current = client;

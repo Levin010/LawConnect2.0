@@ -24,16 +24,6 @@ public class WsDebugFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        System.out.println("[WS-HTTP] Incoming request");
-        System.out.println("[WS-HTTP] path = " + request.getServletPath());
-        System.out.println("[WS-HTTP] uri = " + request.getRequestURI());
-        System.out.println("[WS-HTTP] method = " + request.getMethod());
-        System.out.println("[WS-HTTP] origin = " + request.getHeader("Origin"));
-        System.out.println("[WS-HTTP] auth = " + request.getHeader("Authorization"));
-
         filterChain.doFilter(request, response);
-
-        System.out.println("[WS-HTTP] response status = " + response.getStatus());
-        System.out.println("[WS-HTTP] response ACAO = " + response.getHeader("Access-Control-Allow-Origin"));
     }
 }
