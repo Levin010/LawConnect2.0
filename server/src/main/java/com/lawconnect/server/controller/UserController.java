@@ -2,12 +2,15 @@ package com.lawconnect.server.controller;
 
 import com.lawconnect.server.config.TokenProvider;
 import com.lawconnect.server.dto.AuthToken;
+import com.lawconnect.server.dto.ForgotPasswordRequest;
 import com.lawconnect.server.dto.LoginUser;
+import com.lawconnect.server.dto.ResetPasswordRequest;
 import com.lawconnect.server.model.BlacklistedToken;
 import com.lawconnect.server.model.User;
 import com.lawconnect.server.dto.UserDto;
 import com.lawconnect.server.repository.BlacklistedTokenRepository;
 import com.lawconnect.server.repository.UserRepository;
+import com.lawconnect.server.service.PasswordResetService;
 import com.lawconnect.server.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -47,6 +50,9 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordResetService passwordResetService;
+
     @PostMapping("/auth")
     public ResponseEntity<?> generateToken(@RequestBody LoginUser loginUser) throws AuthenticationException {
         final Authentication authentication = authenticationManager.authenticate(
@@ -74,6 +80,28 @@ public class UserController {
             blacklistedTokenRepository.save(new BlacklistedToken(token, expiration));
         }
         return ResponseEntity.ok("Logged out successfully");
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Map<String, String>> forgotPassword(
+            @Valid @RequestBody ForgotPasswordRequest request,
+            HttpServletRequest httpRequest
+    ) {
+        passwordResetService.requestPasswordReset(request.getEmail(), extractClientIp(httpRequest));
+        return ResponseEntity.ok(Map.of(
+                "message",
+                "If an account exists for that email, a password reset link has been sent."
+        ));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<Map<String, String>> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        try {
+            passwordResetService.resetPassword(request.getToken(), request.getPassword());
+            return ResponseEntity.ok(Map.of("message", "Password reset successful. You can now log in."));
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body(Map.of("message", ex.getMessage()));
+        }
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -111,5 +139,19 @@ public class UserController {
         User user = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
         return ResponseEntity.ok(Map.of("id", user.getId(), "username", user.getUsername()));
+    }
+
+    private String extractClientIp(HttpServletRequest request) {
+        String forwarded = request.getHeader("X-Forwarded-For");
+        if (forwarded != null && !forwarded.isBlank()) {
+            return forwarded.split(",")[0].trim();
+        }
+
+        String realIp = request.getHeader("X-Real-IP");
+        if (realIp != null && !realIp.isBlank()) {
+            return realIp.trim();
+        }
+
+        return request.getRemoteAddr();
     }
 }

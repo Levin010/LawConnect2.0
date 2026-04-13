@@ -14,8 +14,21 @@ interface RegisterRequest {
   role: 'CLIENT' | 'ADVOCATE';
 }
 
+interface ForgotPasswordRequest {
+  email: string;
+}
+
+interface ResetPasswordRequest {
+  token: string;
+  password: string;
+}
+
 interface AuthTokenResponse {
   token: string;
+}
+
+interface MessageResponse {
+  message: string;
 }
 
 export const authApi = baseApi.injectEndpoints({
@@ -35,6 +48,20 @@ export const authApi = baseApi.injectEndpoints({
         body: userData,
       }),
     }),
+    requestPasswordReset: builder.mutation<MessageResponse, ForgotPasswordRequest>({
+      query: (payload) => ({
+        url: '/users/forgot-password',
+        method: 'POST',
+        body: payload,
+      }),
+    }),
+    resetPassword: builder.mutation<MessageResponse, ResetPasswordRequest>({
+      query: (payload) => ({
+        url: '/users/reset-password',
+        method: 'POST',
+        body: payload,
+      }),
+    }),
     logout: builder.mutation<void, void>({
       query: () => ({
         url: '/users/logout',
@@ -44,4 +71,10 @@ export const authApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation, useLogoutMutation } = authApi;
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useRequestPasswordResetMutation,
+  useResetPasswordMutation,
+  useLogoutMutation,
+} = authApi;

@@ -1,8 +1,8 @@
 package com.lawconnect.server.config;
 
+import com.lawconnect.server.model.User;
 import com.lawconnect.server.repository.BlacklistedTokenRepository;
 import com.lawconnect.server.service.UserService;
-import com.lawconnect.server.config.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.Message;
@@ -50,8 +50,9 @@ public class WebSocketAuthInterceptor implements ChannelInterceptor {
 
             String username = tokenProvider.getUsernameFromToken(token);
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            User user = userDetailsService.findOne(username);
 
-            if (!tokenProvider.validateToken(token, userDetails)) {
+            if (!tokenProvider.validateToken(token, userDetails, user.getPasswordChangedAt())) {
                 throw new IllegalArgumentException("Invalid JWT token");
             }
 

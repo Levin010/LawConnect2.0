@@ -1,0 +1,23 @@
+import Navbar from '@/components/Navbar';
+import ForgotPasswordForm from '@/components/password-reset/ForgotPasswordForm';
+
+export default function ForgotPasswordPage() {
+  return (
+    <>
+      <Navbar />
+      <section
+        className="relative min-h-screen flex flex-col items-center justify-center py-12 px-4"
+        style={{
+          backgroundImage: "url('/images/hero_bg.png')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <div className="absolute inset-0 bg-black/55" />
+        <div className="relative z-10 w-full max-w-lg">
+          <ForgotPasswordForm />
+        </div>
+      </section>
+    </>
+  );
+}

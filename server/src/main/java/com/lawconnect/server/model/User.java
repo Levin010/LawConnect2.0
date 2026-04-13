@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -31,6 +32,10 @@ public class User {
     @Column(nullable = false)
     private String name;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
+    private Date passwordChangedAt;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
@@ -38,5 +43,6 @@ public class User {
     @PrePersist
     public void prePersist() {
         if (id == null) id = UUID.randomUUID().toString();
+        if (passwordChangedAt == null) passwordChangedAt = new Date();
     }
 }

@@ -1,6 +1,7 @@
 package com.lawconnect.server.config;
 
 import com.lawconnect.server.repository.BlacklistedTokenRepository;
+import com.lawconnect.server.model.User;
 import com.lawconnect.server.service.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
@@ -65,8 +66,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            User user = userDetailsService.findOne(username);
 
-            if (jwtTokenUtil.validateToken(authToken, userDetails)) {
+            if (jwtTokenUtil.validateToken(authToken, userDetails, user.getPasswordChangedAt())) {
                 UsernamePasswordAuthenticationToken authentication = jwtTokenUtil.getAuthenticationToken(authToken, SecurityContextHolder.getContext().getAuthentication(), userDetails);
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
                 logger.info("User authenticated: " + username + ", setting security context");

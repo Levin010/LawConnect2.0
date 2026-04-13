@@ -79,6 +79,13 @@ public class TokenProvider implements Serializable {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
+    public Boolean validateToken(String token, UserDetails userDetails, Date passwordChangedAt) {
+        final String username = getUsernameFromToken(token);
+        final Date issuedAt = getClaimFromToken(token, Claims::getIssuedAt);
+        boolean issuedAfterPasswordChange = passwordChangedAt == null || (issuedAt != null && !issuedAt.before(passwordChangedAt));
+        return username.equals(userDetails.getUsername()) && !isTokenExpired(token) && issuedAfterPasswordChange;
+    }
+
     UsernamePasswordAuthenticationToken getAuthenticationToken(final String token, final Authentication existingAuth, final UserDetails userDetails) {
         final Claims claims = getAllClaimsFromToken(token);
 
