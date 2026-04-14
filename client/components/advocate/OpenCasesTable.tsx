@@ -1,7 +1,8 @@
 'use client';
 
-import { useGetAdvocateCasesQuery } from '@/store/api/advocateApi';
 import Link from 'next/link';
+import { useGetAdvocateCasesQuery } from '@/store/api/advocateApi';
+import { buildFullName } from '@/lib/user';
 
 export default function OpenCasesTable() {
   const { data: cases, isLoading, isError } = useGetAdvocateCasesQuery();
@@ -64,7 +65,7 @@ export default function OpenCasesTable() {
                     </Link>
                   </td>
                   <td className="px-6 py-4 text-sm font-medium text-gray-800" style={{ fontFamily: 'Georgia, serif' }}>
-                    {c.client?.name ?? '—'}
+                    {c.client ? buildFullName(c.client) : '—'}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600 whitespace-nowrap" style={{ fontFamily: 'Georgia, serif' }}>
                     {new Date(c.dateLaunched).toLocaleDateString('en-KE', { day: 'numeric', month: 'short', year: 'numeric' })}

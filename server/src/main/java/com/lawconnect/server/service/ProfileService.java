@@ -9,7 +9,7 @@ import java.util.Map;
 public interface ProfileService {
     void updateAdvocateFullProfile(String username, AdvocateProfileDto request);
     Map<String, Object> getAdvocateFullProfile(String username);
-    List<Map<String, Object>> getAllAdvocates();
+    List<Map<String, Object>> getAllAdvocates(String search, String category, String county);
     void updateClientFullProfile(String username, ClientProfileDto dto);
     Map<String, Object> getClientFullProfile(String username);
 }

@@ -37,8 +37,11 @@ public class ProfileController {
     }
 
     @GetMapping("/advocates")
-    public ResponseEntity<List<Map<String, Object>>> getAllAdvocates() {
-        return ResponseEntity.ok(profileService.getAllAdvocates());
+    public ResponseEntity<List<Map<String, Object>>> getAllAdvocates(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String county) {
+        return ResponseEntity.ok(profileService.getAllAdvocates(search, category, county));
     }
 
     @GetMapping("/advocates/{username}")
@@ -50,7 +53,7 @@ public class ProfileController {
     @PutMapping("/client")
     public ResponseEntity<?> updateClientProfile(
             Principal principal,
-            @RequestBody ClientProfileDto dto) {
+            @RequestBody @Valid ClientProfileDto dto) {
         profileService.updateClientFullProfile(principal.getName(), dto);
         return ResponseEntity.ok("Profile updated successfully");
     }

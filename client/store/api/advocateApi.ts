@@ -6,6 +6,13 @@ export interface AdvocateSearchParams {
   county?: string;
 }
 
+export interface UserSummary {
+  id: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+}
+
 export interface DashboardStats {
   totalCases: number;
   activeClients: number;
@@ -22,7 +29,8 @@ export interface OpenCase {
 
 export interface AdvocateProfile {
   // From User
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   username: string;
@@ -40,8 +48,8 @@ export interface AdvocateProfile {
 }
 
 export interface ReceivedRequest {
-  id: number;
-  client: { id: number; name: string; username: string };
+  id: string;
+  client: UserSummary;
   firstName: string;
   lastName: string;
   clientRole: 'PLAINTIFF_PETITIONER' | 'DEFENDANT_RESPONDENT';
@@ -60,7 +68,8 @@ export interface CreateCaseDto {
 
 export interface ClientUser {
   username: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
 }
 
@@ -72,8 +81,8 @@ export interface LegalCase {
   caseDescription: string;
   status: 'OPEN' | 'CLOSED';
   dateLaunched: string;
-  client: { id: number; name: string; username: string } | null;
-  advocate: { id: number; name: string; username: string } | null;
+  client: UserSummary | null;
+  advocate: UserSummary | null;
 }
 
 export interface CaseUpdate {

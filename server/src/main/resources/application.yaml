@@ -5,6 +5,10 @@ spring:
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
+    hikari:
+      data-source-properties:
+        prepareThreshold: 0
+        preferQueryMode: simple
   mail:
     host: smtp.gmail.com
     port: 587

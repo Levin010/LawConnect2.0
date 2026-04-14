@@ -14,9 +14,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.List;
 
 @Service
 public class ProfileServiceImpl implements ProfileService {
@@ -35,7 +36,8 @@ public class ProfileServiceImpl implements ProfileService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        user.setName(request.getName());
+        user.setFirstName(normalizeRequiredValue(request.getFirstName()));
+        user.setLastName(normalizeRequiredValue(request.getLastName()));
         user.setPhone(request.getPhone());
         userRepository.save(user);
 
@@ -66,7 +68,8 @@ public class ProfileServiceImpl implements ProfileService {
                 .orElse(new AdvocateProfile());
 
         Map<String, Object> response = new HashMap<>();
-        response.put("name", user.getName());
+        response.put("firstName", user.getFirstName());
+        response.put("lastName", user.getLastName());
         response.put("email", user.getEmail());
         response.put("phone", user.getPhone());
         response.put("username", user.getUsername());
@@ -85,14 +88,19 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public List<Map<String, Object>> getAllAdvocates() {
-        List<AdvocateProfile> profiles = advocateProfileRepository.findAll();
+    public List<Map<String, Object>> getAllAdvocates(String search, String category, String county) {
+        List<AdvocateProfile> profiles = advocateProfileRepository.searchAdvocates(
+                normalizeSearchValue(search),
+                normalizeFilterValue(category),
+                normalizeFilterValue(county)
+        );
 
         return profiles.stream().map(profile -> {
             Map<String, Object> response = new HashMap<>();
             User user = profile.getUser();
             response.put("username", user.getUsername());
-            response.put("name", user.getName());
+            response.put("firstName", user.getFirstName());
+            response.put("lastName", user.getLastName());
             response.put("email", user.getEmail());
             response.put("phone", user.getPhone());
             response.put("gender", profile.getGender());
@@ -113,7 +121,8 @@ public class ProfileServiceImpl implements ProfileService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        user.setName(dto.getName());
+        user.setFirstName(normalizeRequiredValue(dto.getFirstName()));
+        user.setLastName(normalizeRequiredValue(dto.getLastName()));
         user.setPhone(dto.getPhone());
         userRepository.save(user);
 
@@ -139,7 +148,8 @@ public class ProfileServiceImpl implements ProfileService {
                 .orElse(new ClientProfile());
 
         Map<String, Object> response = new HashMap<>();
-        response.put("name", user.getName());
+        response.put("firstName", user.getFirstName());
+        response.put("lastName", user.getLastName());
         response.put("email", user.getEmail());
         response.put("phone", user.getPhone());
         response.put("username", user.getUsername());
@@ -150,5 +160,27 @@ public class ProfileServiceImpl implements ProfileService {
         response.put("profilePicture", profile.getProfilePicture());
 
         return response;
+    }
+
+    private String normalizeSearchValue(String value) {
+        if (value == null) {
+            return null;
+        }
+
+        String trimmed = value.trim();
+        return trimmed.isEmpty() ? null : "%" + trimmed.toLowerCase(Locale.ROOT) + "%";
+    }
+
+    private String normalizeFilterValue(String value) {
+        if (value == null) {
+            return null;
+        }
+
+        String trimmed = value.trim();
+        return trimmed.isEmpty() ? null : trimmed.toLowerCase(Locale.ROOT);
+    }
+
+    private String normalizeRequiredValue(String value) {
+        return value == null ? "" : value.trim();
     }
 }

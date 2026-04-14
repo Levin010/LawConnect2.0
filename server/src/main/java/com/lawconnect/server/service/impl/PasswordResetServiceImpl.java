@@ -77,7 +77,12 @@ public class PasswordResetServiceImpl implements PasswordResetService {
         passwordResetTokenRepository.save(passwordResetToken);
 
         String resetUrl = buildResetUrl(rawToken);
-        passwordResetEmailService.sendPasswordResetEmail(user.getEmail(), user.getName(), resetUrl);
+        passwordResetEmailService.sendPasswordResetEmail(
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                resetUrl
+        );
     }
 
     @Override

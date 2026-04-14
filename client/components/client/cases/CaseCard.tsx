@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { LegalCase } from '@/store/api/advocateApi';
+import { buildFullName } from '@/lib/user';
 
 export default function CaseCard({ legalCase }: { legalCase: LegalCase }) {
   const statusConfig = {
@@ -33,7 +34,7 @@ export default function CaseCard({ legalCase }: { legalCase: LegalCase }) {
           {legalCase.advocate && (
             <div className="flex items-center gap-1.5">
               <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider" style={{ fontFamily: 'Georgia, serif' }}>Advocate</span>
-              <span className="text-sm text-gray-600" style={{ fontFamily: 'Georgia, serif' }}>{legalCase.advocate.name}</span>
+              <span className="text-sm text-gray-600" style={{ fontFamily: 'Georgia, serif' }}>{buildFullName(legalCase.advocate)}</span>
             </div>
           )}
 

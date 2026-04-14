@@ -24,8 +24,11 @@ public class UserDto {
     @NotBlank(message = "Phone is required")
     private String phone;
 
-    @NotBlank(message = "Name is required")
-    private String name;
+    @NotBlank(message = "First name is required")
+    private String firstName;
+
+    @NotBlank(message = "Last name is required")
+    private String lastName;
 
     @NotNull(message = "Role is required")
     private Role role;
@@ -36,7 +39,8 @@ public class UserDto {
         user.setPassword(password);
         user.setEmail(email);
         user.setPhone(phone);
-        user.setName(name);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
         user.setRole(role);
         return user;
     }

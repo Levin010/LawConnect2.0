@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useCreateCaseMutation, useSearchClientsQuery, ClientUser } from '@/store/api/advocateApi';
+import { buildFullName, getNameInitial } from '@/lib/user';
 
 interface FormState {
   caseName: string;
@@ -83,7 +84,7 @@ export default function StandaloneCaseForm() {
   const handleSelectClient = (client: ClientUser) => {
     setSelectedClient(client);
     setForm((prev) => ({ ...prev, clientUsername: client.username }));
-    setSearchInput(client.name);
+    setSearchInput(buildFullName(client));
     setShowDropdown(false);
   };
 
@@ -147,7 +148,7 @@ export default function StandaloneCaseForm() {
           {selectedClient ? (
             <div className="flex items-center justify-between px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50">
               <div>
-                <p className="text-sm font-semibold text-gray-700" style={{ fontFamily: 'Georgia, serif' }}>{selectedClient.name}</p>
+                <p className="text-sm font-semibold text-gray-700" style={{ fontFamily: 'Georgia, serif' }}>{buildFullName(selectedClient)}</p>
                 <p className="text-xs text-gray-400" style={{ fontFamily: 'Georgia, serif' }}>@{selectedClient.username}</p>
               </div>
               <button type="button" onClick={handleClearClient} className="text-gray-300 hover:text-gray-500 transition-colors">
@@ -183,10 +184,10 @@ export default function StandaloneCaseForm() {
                       className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors text-left"
                     >
                       <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0" style={{ backgroundColor: '#8B0000' }}>
-                        {client.name.charAt(0).toUpperCase()}
+                        {getNameInitial(client)}
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-gray-700" style={{ fontFamily: 'Georgia, serif' }}>{client.name}</p>
+                        <p className="text-sm font-semibold text-gray-700" style={{ fontFamily: 'Georgia, serif' }}>{buildFullName(client)}</p>
                         <p className="text-xs text-gray-400" style={{ fontFamily: 'Georgia, serif' }}>@{client.username}</p>
                       </div>
                     </button>

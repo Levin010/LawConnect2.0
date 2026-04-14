@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { AdvocateProfile } from '@/store/api/advocateApi';
+import { buildFullName, getNameInitial } from '@/lib/user';
 
 interface Props {
   advocate: AdvocateProfile;
@@ -19,22 +20,24 @@ const DetailRow = ({ label, value }: { label: string; value: string | number | n
 );
 
 export default function AdvocateDetail({ advocate }: Props) {
+  const fullName = buildFullName(advocate);
+
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col gap-6">
       {/* Avatar + name */}
       <div className="flex items-center gap-4">
         <div className="w-20 h-20 rounded-full overflow-hidden border-4 shrink-0" style={{ borderColor: '#8B0000' }}>
           {advocate.profilePicture ? (
-            <Image src={advocate.profilePicture} alt={advocate.name} width={80} height={80} className="object-cover w-full h-full" />
+            <Image src={advocate.profilePicture} alt={fullName} width={80} height={80} className="object-cover w-full h-full" />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-3xl font-bold text-white" style={{ backgroundColor: '#8B0000' }}>
-              {advocate.name.charAt(0).toUpperCase()}
+              {getNameInitial(advocate)}
             </div>
           )}
         </div>
         <div>
           <h2 className="text-xl font-bold" style={{ fontFamily: 'Georgia, serif', color: '#8B0000' }}>
-            {advocate.name}
+            {fullName}
           </h2>
           <span className="text-sm text-gray-400" style={{ fontFamily: 'Georgia, serif' }}>
             @{advocate.username}

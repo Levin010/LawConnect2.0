@@ -22,14 +22,14 @@ public class SmtpPasswordResetEmailService implements PasswordResetEmailService 
     }
 
     @Override
-    public void sendPasswordResetEmail(String email, String name, String resetUrl) {
+    public void sendPasswordResetEmail(String email, String firstName, String lastName, String resetUrl) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
             helper.setFrom(fromEmail);
             helper.setTo(email);
             helper.setSubject("LawConnect password reset");
-            helper.setText(buildEmailBody(name, resetUrl), false);
+            helper.setText(buildEmailBody(firstName, lastName, resetUrl), false);
             mailSender.send(message);
         } catch (MailAuthenticationException ex) {
             throw new IllegalStateException("Email authentication failed. Set MAIL_PASSWORD to your Gmail app password.", ex);
@@ -40,8 +40,10 @@ public class SmtpPasswordResetEmailService implements PasswordResetEmailService 
         }
     }
 
-    private String buildEmailBody(String name, String resetUrl) {
-        return "Hello " + name + ",\n\n"
+    private String buildEmailBody(String firstName, String lastName, String resetUrl) {
+        String fullName = (firstName + " " + lastName).trim();
+
+        return "Hello " + fullName + ",\n\n"
                 + "We received a request to reset your LawConnect password.\n\n"
                 + "Use the link below to set a new password:\n"
                 + resetUrl + "\n\n"

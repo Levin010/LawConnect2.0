@@ -1,6 +1,7 @@
 'use client';
 
 import { useGetSentRequestsQuery, SentRequest } from '@/store/api/clientApi';
+import { buildFullName } from '@/lib/user';
 
 const statusConfig: Record<SentRequest['status'], { label: string; classes: string }> = {
   PENDING: { label: 'Pending', classes: 'bg-yellow-50 text-yellow-700 border-yellow-200' },
@@ -17,7 +18,7 @@ function RequestCard({ request }: { request: SentRequest }) {
         <div className="flex items-start justify-between gap-4">
           <div>
             <h3 className="text-base font-bold" style={{ fontFamily: 'Georgia, serif', color: '#8B0000' }}>
-              {request.advocate.name}
+              {buildFullName(request.advocate)}
             </h3>
             <p className="text-xs text-gray-400 mt-0.5" style={{ fontFamily: 'Georgia, serif' }}>
               @{request.advocate.username}

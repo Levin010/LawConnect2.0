@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useGetAdvocatesQuery } from '@/store/api/advocateApi';
 import AdvocateCard from './AdvocateCard';
 
@@ -35,17 +35,21 @@ export default function AdvocateSearch() {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
   const [county, setCounty] = useState('');
-  const [submitted, setSubmitted] = useState({ search: '', category: '', county: '' });
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search.trim());
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [search]);
 
   const { data: advocates, isLoading, isError } = useGetAdvocatesQuery({
-    search: submitted.search || undefined,
-    category: submitted.category || undefined,
-    county: submitted.county || undefined,
+    search: debouncedSearch || undefined,
+    category: category || undefined,
+    county: county || undefined,
   });
-
-  const handleSearch = () => {
-    setSubmitted({ search, category, county });
-  };
 
   const inputClass = `
     w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm bg-white
@@ -58,10 +62,9 @@ export default function AdvocateSearch() {
       <div className="flex flex-col md:flex-row gap-3 mb-10">
         <input
           type="text"
-          placeholder="Search by Name, County, or Category"
+          placeholder="Search by name, category, or county"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
           className={`${inputClass} md:flex-1`}
           style={{ fontFamily: 'Georgia, serif' }}
         />
@@ -85,13 +88,6 @@ export default function AdvocateSearch() {
             <option key={c} value={c === 'All Counties' ? '' : c}>{c}</option>
           ))}
         </select>
-        <button
-          onClick={handleSearch}
-          className="px-8 py-2.5 rounded-xl text-white font-semibold text-sm transition-colors hover:brightness-90"
-          style={{ backgroundColor: '#8B0000', fontFamily: 'Georgia, serif' }}
-        >
-          Search
-        </button>
       </div>
 
       {/* Results */}

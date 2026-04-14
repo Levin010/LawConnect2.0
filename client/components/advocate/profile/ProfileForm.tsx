@@ -18,7 +18,8 @@ const COUNTIES = [
 const GENDERS = ['Male', 'Female', 'Other', 'Prefer not to say'];
 
 interface FormState {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   username: string;
@@ -41,7 +42,7 @@ export default function ProfileForm() {
   const [isEditing, setIsEditing] = useState(false);
 
   const [form, setForm] = useState<FormState>({
-    name: '', email: '', phone: '', username: '',
+    firstName: '', lastName: '', email: '', phone: '', username: '',
     gender: '', category: '', lawFirm: '', county: '',
     address: '', postalAddress: '', experience: null,
     bio: '', profilePicture: null, practicingCertificate: null,
@@ -52,7 +53,8 @@ export default function ProfileForm() {
   useEffect(() => {
     if (profile) {
     setForm({
-      name: profile.name ?? '',
+      firstName: profile.firstName ?? '',
+      lastName: profile.lastName ?? '',
       email: profile.email ?? '',
       phone: profile.phone ?? '',
       username: profile.username ?? '',
@@ -133,7 +135,7 @@ export default function ProfileForm() {
         {/* LEFT COLUMN — avatar + read-only account info */}
         <div className="flex flex-col items-center lg:items-start gap-6 lg:w-64 shrink-0">
           <ProfilePicture
-            name={form.name}
+            name={`${form.firstName} ${form.lastName}`.trim()}
             profilePicture={form.profilePicture}
             isEditing={isEditing}
             onImageChange={(url) => setForm((prev) => ({ ...prev, profilePicture: url }))}
@@ -165,8 +167,13 @@ export default function ProfileForm() {
         {/* RIGHT COLUMN — all editable fields in 2-col grid */}
         <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div>
-            <label className={labelClass} style={{ fontFamily: 'Georgia, serif' }}>Full Name</label>
-            <input name="name" value={form.name} onChange={handleChange} className={inputClass()} readOnly={!isEditing} style={{ fontFamily: 'Georgia, serif' }} />
+            <label className={labelClass} style={{ fontFamily: 'Georgia, serif' }}>First Name</label>
+            <input name="firstName" value={form.firstName} onChange={handleChange} className={inputClass()} readOnly={!isEditing} style={{ fontFamily: 'Georgia, serif' }} />
+          </div>
+
+          <div>
+            <label className={labelClass} style={{ fontFamily: 'Georgia, serif' }}>Last Name</label>
+            <input name="lastName" value={form.lastName} onChange={handleChange} className={inputClass()} readOnly={!isEditing} style={{ fontFamily: 'Georgia, serif' }} />
           </div>
 
           <div>
@@ -267,7 +274,8 @@ export default function ProfileForm() {
           setErrorMessage('');
           setSuccessMessage('');
           if (profile) setForm({
-            name: profile.name ?? '',
+            firstName: profile.firstName ?? '',
+            lastName: profile.lastName ?? '',
             email: profile.email ?? '',
             phone: profile.phone ?? '',
             username: profile.username ?? '',

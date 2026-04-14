@@ -6,7 +6,8 @@ interface LoginRequest {
 }
 
 interface RegisterRequest {
-  name: string;
+  firstName: string;
+  lastName: string;
   phone: string;
   email: string;
   username: string;

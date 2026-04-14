@@ -1,5 +1,5 @@
 import { baseApi } from './baseApi';
-import { LegalCase } from './advocateApi';
+import { LegalCase, UserSummary } from './advocateApi';
 
 export interface DashboardStats {
   totalCases: number;
@@ -16,7 +16,8 @@ export interface OpenCase {
 
 export interface ClientProfile {
   // From User
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   username: string;
@@ -37,8 +38,8 @@ export interface RepresentationRequest {
 }
 
 export interface SentRequest {
-  id: number;
-  advocate: { id: number; name: string; username: string };
+  id: string;
+  advocate: UserSummary;
   firstName: string;
   lastName: string;
   clientRole: 'PLAINTIFF_PETITIONER' | 'DEFENDANT_RESPONDENT';

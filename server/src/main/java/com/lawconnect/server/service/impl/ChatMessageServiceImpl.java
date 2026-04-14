@@ -97,7 +97,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         ChatMessageDto dto = new ChatMessageDto();
         dto.setMessageId(m.getId());
         dto.setSenderId(m.getSender().getId());
-        dto.setSenderName(m.getSender().getName());
+        dto.setSenderName((m.getSender().getFirstName() + " " + m.getSender().getLastName()).trim());
         dto.setSenderUsername(m.getSender().getUsername());
         dto.setReceiverId(m.getReceiver().getId());
         dto.setReceiverUsername(m.getReceiver().getUsername());

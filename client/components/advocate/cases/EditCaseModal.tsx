@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useUpdateCaseMutation, LegalCase } from '@/store/api/advocateApi';
+import { buildFullName, getNameInitial } from '@/lib/user';
 
 interface Props {
   legalCase: LegalCase;
@@ -41,6 +42,7 @@ const errorClass = 'mt-1 text-red-400 text-xs';
 
 export default function EditCaseModal({ legalCase, onClose }: Props) {
   const [updateCase, { isLoading }] = useUpdateCaseMutation();
+  const clientName = legalCase.client ? buildFullName(legalCase.client) : '';
 
   const [form, setForm] = useState<FormState>({
     caseName: legalCase.caseName,
@@ -140,10 +142,10 @@ export default function EditCaseModal({ legalCase, onClose }: Props) {
               </label>
               <div className="flex items-center gap-3 px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50">
                 <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0" style={{ backgroundColor: '#8B0000' }}>
-                  {legalCase.client.name.charAt(0).toUpperCase()}
+                  {getNameInitial(legalCase.client)}
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-gray-700" style={{ fontFamily: 'Georgia, serif' }}>{legalCase.client.name}</p>
+                  <p className="text-sm font-semibold text-gray-700" style={{ fontFamily: 'Georgia, serif' }}>{clientName}</p>
                   <p className="text-xs text-gray-400" style={{ fontFamily: 'Georgia, serif' }}>@{legalCase.client.username}</p>
                 </div>
               </div>

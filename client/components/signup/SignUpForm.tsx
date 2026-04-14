@@ -8,7 +8,8 @@ import { Eye, EyeOff } from 'lucide-react';
 type Role = 'CLIENT' | 'ADVOCATE';
 
 interface FormData {
-  name: string;
+  firstName: string;
+  lastName: string;
   phone: string;
   email: string;
   username: string;
@@ -17,7 +18,8 @@ interface FormData {
 }
 
 interface FormErrors {
-  name?: string;
+  firstName?: string;
+  lastName?: string;
   phone?: string;
   email?: string;
   username?: string;
@@ -27,7 +29,8 @@ interface FormErrors {
 }
 
 const emptyForm: FormData = {
-  name: '',
+  firstName: '',
+  lastName: '',
   phone: '',
   email: '',
   username: '',
@@ -38,7 +41,8 @@ const emptyForm: FormData = {
 function validateForm(data: FormData): FormErrors {
   const errors: FormErrors = {};
 
-  if (!data.name.trim()) errors.name = 'Name is required.';
+  if (!data.firstName.trim()) errors.firstName = 'First name is required.';
+  if (!data.lastName.trim()) errors.lastName = 'Last name is required.';
 
   if (!data.phone.trim()) errors.phone = 'Phone is required.';
 
@@ -111,7 +115,8 @@ export default function SignupForm() {
 
     try {
       await register({
-        name: formData.name,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
         phone: formData.phone,
         email: formData.email,
         username: formData.username,
@@ -133,7 +138,8 @@ export default function SignupForm() {
   };
 
   const fields: { name: keyof FormData; label: string; type: string }[] = [
-    { name: 'name', label: 'Full Name', type: 'text' },
+    { name: 'firstName', label: 'First Name', type: 'text' },
+    { name: 'lastName', label: 'Last Name', type: 'text' },
     { name: 'phone', label: 'Phone Number', type: 'tel' },
     { name: 'email', label: 'Email Address', type: 'email' },
     { name: 'username', label: 'Username', type: 'text' },

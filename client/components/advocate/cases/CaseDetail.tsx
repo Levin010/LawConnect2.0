@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { MessageCircle } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
+import { buildFullName } from '@/lib/user';
 
 export default function CaseDetail({ caseId }: { caseId: string }) {
   const { data: legalCase, isLoading, isError } = useGetCaseByIdQuery(caseId);
@@ -82,7 +83,7 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
                 { label: 'Case Number', value: legalCase.caseNumber },
-                { label: 'Client', value: legalCase.client?.name ?? 'No client assigned' },
+                { label: 'Client', value: legalCase.client ? buildFullName(legalCase.client) : 'No client assigned' },
                 { label: 'Client Role', value: legalCase.clientRole.replace('_', ' / ') },
                 { label: 'Date Launched', value: new Date(legalCase.dateLaunched).toLocaleDateString('en-KE', { day: 'numeric', month: 'short', year: 'numeric' }) },
               ].map(({ label, value }) => (
@@ -103,7 +104,7 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
 
             {legalCase.client && (
               <button
-                onClick={() => router.push(`/advocate/chat/${legalCase.client!.id}?name=${encodeURIComponent(legalCase.client!.name)}`)}
+                onClick={() => router.push(`/advocate/chat/${legalCase.client!.id}?name=${encodeURIComponent(buildFullName(legalCase.client!))}`)}
                 className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border-2 hover:bg-gray-50 transition-colors"
                 style={{ borderColor: '#8B0000', color: '#8B0000', fontFamily: 'Georgia, serif' }}
               >

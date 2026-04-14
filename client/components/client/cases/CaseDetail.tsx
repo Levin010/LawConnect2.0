@@ -5,6 +5,7 @@ import DocumentRepository from '@/components/advocate/cases/DocumentRepository';
 import CaseUpdates from './CaseUpdates';
 import { useRouter } from 'next/navigation';
 import { MessageCircle } from 'lucide-react';
+import { buildFullName } from '@/lib/user';
 
 export default function CaseDetail({ caseId }: { caseId: string }) {
   const { data: legalCase, isLoading, isError } = useGetCaseByIdQuery(caseId);
@@ -44,7 +45,7 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[
               { label: 'Case Number', value: legalCase.caseNumber },
-              { label: 'Advocate', value: legalCase.advocate?.name ?? 'Not assigned' },
+              { label: 'Advocate', value: legalCase.advocate ? buildFullName(legalCase.advocate) : 'Not assigned' },
               { label: 'Your Role', value: legalCase.clientRole.replace('_', ' / ') },
               {
                 label: 'Date Launched',
@@ -68,7 +69,7 @@ export default function CaseDetail({ caseId }: { caseId: string }) {
           <div className="flex flex-wrap gap-3 pt-2 border-t border-gray-100">
             {legalCase.advocate && (
               <button
-                onClick={() => router.push(`/client/chat/${legalCase.advocate!.id}?name=${encodeURIComponent(legalCase.advocate!.name)}`)}
+                onClick={() => router.push(`/client/chat/${legalCase.advocate!.id}?name=${encodeURIComponent(buildFullName(legalCase.advocate!))}`)}
                 className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border-2 hover:bg-gray-50 transition-colors"
                 style={{ borderColor: '#8B0000', color: '#8B0000', fontFamily: 'Georgia, serif' }}
               >

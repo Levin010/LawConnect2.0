@@ -3,14 +3,15 @@
 import Image from 'next/image';
 import { AdvocateProfile } from '@/store/api/advocateApi';
 import { useRouter } from 'next/navigation';
+import { buildFullName } from '@/lib/user';
 
 interface Props {
   advocate: AdvocateProfile;
 }
 
 export default function AdvocateCard({ advocate }: Props) {
-
   const router = useRouter();
+  const fullName = buildFullName(advocate);
 
   return (
     <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-100 flex flex-col">
@@ -23,7 +24,7 @@ export default function AdvocateCard({ advocate }: Props) {
           {advocate.profilePicture ? (
             <Image
               src={advocate.profilePicture}
-              alt={advocate.name}
+              alt={fullName}
               width={192}
               height={192}
               className="object-cover w-full h-full"
@@ -42,7 +43,7 @@ export default function AdvocateCard({ advocate }: Props) {
           className="text-white font-bold text-lg text-center leading-tight"
           style={{ fontFamily: 'Georgia, serif' }}
         >
-          {advocate.name}
+          {fullName}
         </h3>
         <span
           className="mt-2 px-3 py-1 rounded-full text-xs font-semibold bg-white/20 text-white"

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useUpdateRequestStatusMutation, useCreateCaseMutation, ReceivedRequest } from '@/store/api/advocateApi';
+import { buildFullName } from '@/lib/user';
 
 interface Props {
   request: ReceivedRequest;
@@ -124,7 +125,7 @@ export default function LaunchCaseModal({ request, onClose }: Props) {
               Request Details
             </h3>
             {[
-              { label: 'Client', value: request.client.name },
+              { label: 'Client', value: buildFullName(request.client) },
               { label: 'Client Name Filled', value: request.firstName + ' ' + request.lastName },
               { label: 'Party Role', value: request.clientRole.replace('_', ' / ') },
               { label: 'Case Description', value: request.caseDescription },
