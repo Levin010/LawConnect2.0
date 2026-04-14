@@ -4,8 +4,14 @@ import { useDispatch } from 'react-redux';
 import { useLogoutMutation } from '@/store/api/authApi';
 import { logout } from '@/store/slices/authSlice';
 import { getRefreshToken } from '@/lib/auth';
+import { LogOut } from 'lucide-react';
 
-export default function LogoutButton() {
+type LogoutButtonProps = {
+  className?: string;
+  showIcon?: boolean;
+};
+
+export default function LogoutButton({ className = '', showIcon = false }: LogoutButtonProps) {
   const dispatch = useDispatch();
   const [logoutMutation, { isLoading }] = useLogoutMutation();
 
@@ -25,10 +31,13 @@ export default function LogoutButton() {
     <button
       onClick={handleLogout}
       disabled={isLoading}
-      className="px-6 py-2 rounded-lg text-white font-semibold transition-colors disabled:opacity-60"
+      className={`px-0 py-2 rounded-lg text-white font-semibold transition-colors disabled:opacity-60 ${className}`.trim()}
       style={{ backgroundColor: '#8B0000', fontFamily: 'Georgia, serif' }}
     >
-      {isLoading ? 'Logging out...' : 'Logout'}
+      <span className="flex items-center gap-2">
+        {showIcon && <LogOut className="h-4 w-4 shrink-0" />}
+        <span>{isLoading ? 'Logging out...' : 'Logout'}</span>
+      </span>
     </button>
   );
 }

@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import LogoutButton from '@/components/login/LogoutButton';
+import { CircleUser, LayoutDashboard, MessageCircleCheck, Receipt } from 'lucide-react';
 
 const casesLinks = [
   { label: 'My Cases', href: '/advocate/cases' },
@@ -38,11 +39,21 @@ export default function AdvocateNavbar() {
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [menuOpen]);
+
   const navLinkClass = 'text-white font-semibold hover:text-gray-200 transition-colors text-sm';
   const dropdownItemClass = 'block px-5 py-3 text-sm text-white hover:bg-white/10 transition-colors';
+  const mobileLinkClass = `${navLinkClass} block`;
+  const mobileSectionLabelClass = 'text-white/60 text-xs font-semibold uppercase tracking-wider';
 
   return (
-    <header className="relative z-50" style={{ backgroundColor: '#8B0000' }}>
+    <>
+      <header className="sticky top-0 z-50 shadow-md" style={{ backgroundColor: '#8B0000' }}>
       <div className="flex items-center justify-between px-6 py-3">
         {/* Logo */}
         <Link href="/advocate/dashboard" className="flex items-center">
@@ -131,33 +142,64 @@ export default function AdvocateNavbar() {
           <span className={`block w-6 h-0.5 bg-white transition-all duration-300 ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
         </button>
       </div>
+      </header>
 
       {/* Mobile menu */}
-      {menuOpen && (
-        <nav className="md:hidden border-t border-white/20 px-6 py-4 flex flex-col gap-4">
-          <Link href="/advocate/dashboard" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
-            Dashboard
-          </Link>
-          <div className="flex flex-col gap-2">
-            <span className="text-white/60 text-xs uppercase tracking-wider" style={{ fontFamily: 'Georgia, serif' }}>Cases</span>
+      <div
+        className={`fixed inset-0 z-40 md:hidden transition-opacity duration-300 ${menuOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'}`}
+        aria-hidden={!menuOpen}
+      >
+        <button
+          className="absolute inset-0 bg-black/40"
+          onClick={() => setMenuOpen(false)}
+          aria-label="Close menu overlay"
+        />
+        <nav
+          className={`absolute right-0 top-0 flex h-full w-[60vw] flex-col gap-4 overflow-y-auto border-l border-white/20 px-6 py-24 shadow-2xl transition-transform duration-300 ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+          style={{ backgroundColor: '#8B0000' }}
+        >
+          <div className="flex items-center gap-2">
+            <LayoutDashboard className="h-4 w-4 shrink-0 text-white" />
+            <Link href="/advocate/dashboard" className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
+              Dashboard
+            </Link>
+          </div>
+          <div className="flex flex-col gap-2 border-t border-white/15 pt-4">
+            <span className={mobileSectionLabelClass} style={{ fontFamily: 'Georgia, serif' }}>Cases</span>
+            <div className="pl-4 flex flex-col gap-2">
             {casesLinks.map((link) => (
-              <Link key={link.label} href={link.href} className="text-white text-sm pl-3 hover:text-gray-200 transition-colors" style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
+              <Link key={link.label} href={link.href} className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
                 {link.label}
               </Link>
             ))}
+            </div>
           </div>
-          <Link href="/advocate/chats" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
+          <div className="flex items-center gap-2">
+            <MessageCircleCheck className="h-4 w-4 shrink-0 text-white" />
+          <Link href="/advocate/chats" className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
             Chats
           </Link>
-          <Link href="/advocate/bills" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
-            Client Bills
-          </Link>
-          <Link href="/advocate/profile" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
-            My Profile
-          </Link>
-          <LogoutButton />
+          </div>
+          <div className="flex items-center gap-2">
+            <Receipt className="h-4 w-4 shrink-0 text-white" />
+            <Link href="/advocate/bills" className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
+              Client Bills
+            </Link>
+          </div>
+          <div className="flex items-center gap-2">
+            <CircleUser className="h-4 w-4 shrink-0 text-white" />
+            <Link href="/advocate/profile" className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
+              My Profile
+            </Link>
+          </div>
+          <div className="mt-auto border-t border-white/15 pt-6">
+            <LogoutButton
+              className="w-full rounded-none px-0 py-0 text-left text-sm font-semibold hover:text-gray-200"
+              showIcon
+            />
+          </div>
         </nav>
-      )}
-    </header>
+      </div>
+    </>
   );
 }

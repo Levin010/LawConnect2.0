@@ -48,6 +48,6 @@ public class SmtpPasswordResetEmailService implements PasswordResetEmailService 
                 + "Use the link below to set a new password:\n"
                 + resetUrl + "\n\n"
                 + "If you did not request this, you can ignore this email.\n\n"
-                + "LawConnect";
+                + "Team LawConnect";
     }
 }
