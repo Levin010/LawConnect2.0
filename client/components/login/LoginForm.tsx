@@ -34,7 +34,11 @@ export default function LoginForm() {
       const data = await login(formData).unwrap();
       const decoded = decodeToken(data.token);
 
-      dispatch(setCredentials({ token: data.token, username: decoded?.sub ?? formData.username }));
+      dispatch(setCredentials({
+        token: data.token,
+        refreshToken: data.refreshToken,
+        username: decoded?.sub ?? formData.username,
+      }));
 
       if (decoded?.roles === 'ROLE_ADVOCATE') {
         window.location.href = '/advocate/dashboard';

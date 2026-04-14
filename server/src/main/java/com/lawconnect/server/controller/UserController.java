@@ -4,13 +4,16 @@ import com.lawconnect.server.config.TokenProvider;
 import com.lawconnect.server.dto.AuthToken;
 import com.lawconnect.server.dto.ForgotPasswordRequest;
 import com.lawconnect.server.dto.LoginUser;
+import com.lawconnect.server.dto.RefreshTokenRequest;
 import com.lawconnect.server.dto.ResetPasswordRequest;
 import com.lawconnect.server.model.BlacklistedToken;
+import com.lawconnect.server.model.RefreshToken;
 import com.lawconnect.server.model.User;
 import com.lawconnect.server.dto.UserDto;
 import com.lawconnect.server.repository.BlacklistedTokenRepository;
 import com.lawconnect.server.repository.UserRepository;
 import com.lawconnect.server.service.PasswordResetService;
+import com.lawconnect.server.service.RefreshTokenService;
 import com.lawconnect.server.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -53,6 +56,9 @@ public class UserController {
     @Autowired
     private PasswordResetService passwordResetService;
 
+    @Autowired
+    private RefreshTokenService refreshTokenService;
+
     @PostMapping("/auth")
     public ResponseEntity<?> generateToken(@RequestBody LoginUser loginUser) throws AuthenticationException {
         final Authentication authentication = authenticationManager.authenticate(
@@ -63,7 +69,9 @@ public class UserController {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = jwtTokenUtil.generateToken(authentication);
-        return ResponseEntity.ok(new AuthToken(token));
+        User user = userService.findOne(authentication.getName());
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
+        return ResponseEntity.ok(new AuthToken(token, refreshToken.getToken()));
     }
 
     @PostMapping("/register")
@@ -72,14 +80,38 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletRequest request) {
+    public ResponseEntity<?> logout(
+            HttpServletRequest request,
+            @RequestBody(required = false) RefreshTokenRequest refreshTokenRequest
+    ) {
         String header = request.getHeader("Authorization");
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7);
-            Date expiration = jwtTokenUtil.getExpirationDateFromToken(token);
-            blacklistedTokenRepository.save(new BlacklistedToken(token, expiration));
+            try {
+                Date expiration = jwtTokenUtil.getExpirationDateFromToken(token);
+                blacklistedTokenRepository.save(new BlacklistedToken(token, expiration));
+            } catch (Exception ignored) {
+                // Access token may already be expired; refresh token revocation is the important part.
+            }
         }
+
+        if (refreshTokenRequest != null) {
+            refreshTokenService.revokeRefreshToken(refreshTokenRequest.getRefreshToken());
+        }
+
         return ResponseEntity.ok("Logged out successfully");
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        RefreshToken rotatedRefreshToken = refreshTokenService.rotateRefreshToken(refreshTokenRequest.getRefreshToken());
+        User user = rotatedRefreshToken.getUser();
+        UserDetails userDetails = userService.loadUserByUsername(user.getUsername());
+        String accessToken = jwtTokenUtil.generateToken(
+                new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities())
+        );
+
+        return ResponseEntity.ok(new AuthToken(accessToken, rotatedRefreshToken.getToken()));
     }
 
     @PostMapping("/forgot-password")

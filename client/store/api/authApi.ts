@@ -25,10 +25,15 @@ interface ResetPasswordRequest {
 
 interface AuthTokenResponse {
   token: string;
+  refreshToken: string;
 }
 
 interface MessageResponse {
   message: string;
+}
+
+interface RefreshTokenRequest {
+  refreshToken: string;
 }
 
 export const authApi = baseApi.injectEndpoints({
@@ -62,10 +67,18 @@ export const authApi = baseApi.injectEndpoints({
         body: payload,
       }),
     }),
-    logout: builder.mutation<void, void>({
-      query: () => ({
+    refresh: builder.mutation<AuthTokenResponse, RefreshTokenRequest>({
+      query: (payload) => ({
+        url: '/users/refresh',
+        method: 'POST',
+        body: payload,
+      }),
+    }),
+    logout: builder.mutation<void, RefreshTokenRequest | void>({
+      query: (payload) => ({
         url: '/users/logout',
         method: 'POST',
+        body: payload,
       }),
     }),
   }),
@@ -76,5 +89,6 @@ export const {
   useRegisterMutation,
   useRequestPasswordResetMutation,
   useResetPasswordMutation,
+  useRefreshMutation,
   useLogoutMutation,
 } = authApi;

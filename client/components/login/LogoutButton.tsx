@@ -3,6 +3,7 @@
 import { useDispatch } from 'react-redux';
 import { useLogoutMutation } from '@/store/api/authApi';
 import { logout } from '@/store/slices/authSlice';
+import { getRefreshToken } from '@/lib/auth';
 
 export default function LogoutButton() {
   const dispatch = useDispatch();
@@ -10,7 +11,8 @@ export default function LogoutButton() {
 
   const handleLogout = async () => {
     try {
-      await logoutMutation().unwrap();
+      const refreshToken = getRefreshToken();
+      await logoutMutation(refreshToken ? { refreshToken } : undefined).unwrap();
     } catch {
       // even if backend call fails, clear client state
     } finally {

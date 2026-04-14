@@ -1,7 +1,8 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { Client, IMessage } from '@stomp/stompjs';
-import { getToken } from '@/lib/auth';
+import { useSelector } from 'react-redux';
 import { ChatMessageDto } from '@/store/api/chatApi';
+import { RootState } from '@/store';
 
 interface UseChatOptions {
   myUserId: string;
@@ -20,6 +21,7 @@ export function useChat({ myUserId, myUsername, onMessage, onReadReceipt, enable
   const clientRef = useRef<Client | null>(null);
   const onMessageRef = useRef(onMessage);
   const onReadReceiptRef = useRef(onReadReceipt);
+  const token = useSelector((state: RootState) => state.auth.token);
 
     useEffect(() => {
       onMessageRef.current = onMessage;
@@ -35,10 +37,7 @@ export function useChat({ myUserId, myUsername, onMessage, onReadReceipt, enable
     }, []);
 
   useEffect(() => {
-    if (!enabled || !myUserId || !myUsername) return;
-
-    const token = getToken();
-    const wsUrl = process.env.NEXT_PUBLIC_WS_URL ?? 'http://localhost:8080/ws';
+    if (!enabled || !myUserId || !myUsername || !token) return;
 
     const client = new Client({
       brokerURL: process.env.NEXT_PUBLIC_WS_URL?.replace('http', 'ws'),
@@ -79,7 +78,7 @@ export function useChat({ myUserId, myUsername, onMessage, onReadReceipt, enable
         }, 300);
         clientRef.current = null;
     };
-  }, [enabled, myUserId, myUsername]);
+  }, [enabled, myUserId, myUsername, token]);
 
   return { sendMessage };
 }

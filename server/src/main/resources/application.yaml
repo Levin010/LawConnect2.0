@@ -33,6 +33,8 @@ jwt:
   token:
     validity: 18000
     prefix: Bearer
+  refresh-token:
+    validity: 2592000
   signing:
     key: ${JWT_SIGNING_KEY}
   authorities:
