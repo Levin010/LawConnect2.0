@@ -129,7 +129,7 @@ export const advocateApi = baseApi.injectEndpoints({
       query: () => '/representation-requests/incoming',
       providesTags: ['Requests'],
     }),
-    updateRequestStatus: builder.mutation<void, { requestId: number; status: 'ACCEPTED' | 'REJECTED' }>({
+    updateRequestStatus: builder.mutation<void, { requestId: string; status: 'ACCEPTED' | 'REJECTED' }>({
       query: ({ requestId, status }) => ({
         url: `/representation-requests/${requestId}/status?status=${status}`,
         method: 'PUT',
