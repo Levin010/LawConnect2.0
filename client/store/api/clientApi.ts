@@ -7,13 +7,6 @@ export interface DashboardStats {
   closedCases: number;
 }
 
-export interface OpenCase {
-  id: number;
-  dateOpened: string;
-  advocateName: string;
-  caseName: string;
-}
-
 export interface ClientProfile {
   // From User
   firstName: string;
@@ -66,10 +59,7 @@ export const clientApi = baseApi.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
     getClientDashboardStats: builder.query<DashboardStats, void>({
-      query: () => '/clients/dashboard/stats',
-    }),
-    getClientOpenCases: builder.query<OpenCase[], void>({
-      query: () => '/clients/dashboard/open-cases',
+      query: () => '/cases/dashboard/stats/client',
     }),
     getClientProfile: builder.query<ClientProfile, void>({
       query: () => '/profile/client',
@@ -122,7 +112,6 @@ export const clientApi = baseApi.injectEndpoints({
 
 export const { 
     useGetClientDashboardStatsQuery,
-    useGetClientOpenCasesQuery,
     useGetClientProfileQuery,
     useUpdateClientProfileMutation,
     useSendRepresentationRequestMutation,

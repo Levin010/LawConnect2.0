@@ -119,4 +119,16 @@ public class LegalCaseServiceImpl implements LegalCaseService {
 
         return new DashboardStats(totalCases, activeClients, activeCases, closedCases);
     }
+
+    @Override
+    public DashboardStats getClientDashboardStats(String clientUsername) {
+        User client = userRepository.findByUsername(clientUsername)
+                .orElseThrow(() -> new UsernameNotFoundException("Client not found"));
+
+        long totalCases = legalCaseRepository.countByClient(client);
+        long activeCases = legalCaseRepository.countByClientAndStatus(client, CaseStatus.OPEN);
+        long closedCases = legalCaseRepository.countByClientAndStatus(client, CaseStatus.CLOSED);
+
+        return new DashboardStats(totalCases, 0, activeCases, closedCases);
+    }
 }

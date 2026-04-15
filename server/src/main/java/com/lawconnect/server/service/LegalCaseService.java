@@ -15,4 +15,5 @@ public interface LegalCaseService {
     List<LegalCase> getCasesByClient(String clientUsername);
     LegalCase getCaseById(String caseId);
     DashboardStats getAdvocateDashboardStats(String advocateUsername);
+    DashboardStats getClientDashboardStats(String clientUsername);
 }

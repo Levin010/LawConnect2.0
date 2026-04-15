@@ -16,4 +16,6 @@ public interface LegalCaseRepository extends JpaRepository<LegalCase, String> {
     long countByAdvocate(User advocate);
     long countByAdvocateAndStatus(User advocate, CaseStatus status);
     long countDistinctClientByAdvocateAndStatus(User advocate, CaseStatus status);
+    long countByClient(User client);
+    long countByClientAndStatus(User client, CaseStatus status);
 }

@@ -76,4 +76,10 @@ public class LegalCaseController {
     public ResponseEntity<DashboardStats> getDashboardStats(Principal principal) {
         return ResponseEntity.ok(legalCaseService.getAdvocateDashboardStats(principal.getName()));
     }
+
+    @PreAuthorize("hasRole('CLIENT')")
+    @GetMapping("/dashboard/stats/client")
+    public ResponseEntity<DashboardStats> getClientDashboardStats(Principal principal) {
+        return ResponseEntity.ok(legalCaseService.getClientDashboardStats(principal.getName()));
+    }
 }
