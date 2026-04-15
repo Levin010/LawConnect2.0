@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import LogoutButton from '@/components/login/LogoutButton';
-import { CircleUser, LayoutDashboard, MessageCircleCheck, Receipt } from 'lucide-react';
+import { BriefcaseBusiness, CircleUser, LayoutDashboard, Mails, MessageCircleCheck, Receipt, Scale } from 'lucide-react';
 
 const casesLinks = [
   { label: 'My Cases', href: '/advocate/cases' },
@@ -49,7 +49,7 @@ export default function AdvocateNavbar() {
   const navLinkClass = 'text-white font-semibold hover:text-gray-200 transition-colors text-sm';
   const dropdownItemClass = 'block px-5 py-3 text-sm text-white hover:bg-white/10 transition-colors';
   const mobileLinkClass = `${navLinkClass} block`;
-  const mobileSectionLabelClass = 'text-white/60 text-xs font-semibold uppercase tracking-wider';
+  const mobileSectionLabelClass = 'text-white text-xs font-semibold uppercase tracking-wider';
 
   return (
     <>
@@ -167,11 +167,24 @@ export default function AdvocateNavbar() {
           <div className="flex flex-col gap-2 border-t border-white/15 pt-4">
             <span className={mobileSectionLabelClass} style={{ fontFamily: 'Georgia, serif' }}>Cases</span>
             <div className="pl-4 flex flex-col gap-2">
-            {casesLinks.map((link) => (
-              <Link key={link.label} href={link.href} className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
-                {link.label}
-              </Link>
-            ))}
+              <div className="flex items-center gap-2">
+                <Scale className="h-4 w-4 shrink-0 text-white" />
+                <Link href="/advocate/cases" className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
+                  My Cases
+                </Link>
+              </div>
+              <div className="flex items-center gap-2">
+                <Mails className="h-4 w-4 shrink-0 text-white" />
+                <Link href="/advocate/requests" className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
+                  Received Requests
+                </Link>
+              </div>
+              <div className="flex items-center gap-2">
+                <BriefcaseBusiness className="h-4 w-4 shrink-0 text-white" />
+                <Link href="/advocate/cases/new" className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
+                  New Case
+                </Link>
+              </div>
             </div>
           </div>
           <div className="flex items-center gap-2">

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import LogoutButton from '@/components/login/LogoutButton';
+import { CircleUser, FileUser, LayoutDashboard, Mails, MessageCircleCheck, Receipt, Scale } from 'lucide-react';
 
 const clientCasesLinks = [
   { label: 'My Cases', href: '/client/cases' },
@@ -43,7 +44,7 @@ export default function Navbar() {
   const navLinkClass = 'text-white font-semibold hover:text-gray-200 transition-colors text-sm';
   const dropdownItemClass = 'block px-5 py-3 text-sm text-white hover:bg-white/10 transition-colors';
   const mobileLinkClass = `${navLinkClass} block`;
-  const mobileSectionLabelClass = 'text-white/60 text-xs font-semibold uppercase tracking-wider';
+  const mobileSectionLabelClass = 'text-white text-xs font-semibold uppercase tracking-wider';
 
   return (
     <>
@@ -165,26 +166,46 @@ export default function Navbar() {
           style={{ backgroundColor: '#8B0000' }}
         >
           {isClient && (
-            <Link href="/client/dashboard" className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>Dashboard</Link>
+            <div className="flex items-center gap-2">
+              <LayoutDashboard className="h-4 w-4 shrink-0 text-white" />
+              <Link href="/client/dashboard" className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>Dashboard</Link>
+            </div>
           )}
           {!isAuthenticated && (
             <Link href="/" className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>Home</Link>
           )}
-
-          <Link href="/advocates" className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>Advocate Listing</Link>
+          <div className="flex items-center gap-2">
+            <FileUser className="h-4 w-4 shrink-0 text-white" />
+            <Link href="/advocates" className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>Advocate Listing</Link>
+          </div>
 
           {isClient && (
             <>
               <div className="flex flex-col gap-2 border-t border-white/15 pt-4">
                 <span className={mobileSectionLabelClass} style={{ fontFamily: 'Georgia, serif' }}>Cases</span>
-                {clientCasesLinks.map((link) => (
-                  <Link key={link.label} href={link.href} className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
-                    {link.label}
-                  </Link>
-                ))}
+                <div className="pl-4 flex flex-col gap-2">
+                  <div className="flex items-center gap-2">
+                    <Scale className="h-4 w-4 shrink-0 text-white" />
+                    <Link href="/client/cases" className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
+                      My Cases
+                    </Link>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Mails className="h-4 w-4 shrink-0 text-white" />
+                    <Link href="/client/requests" className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>
+                      Sent Requests
+                    </Link>
+                  </div>
+                </div>
               </div>
-              <Link href="/client/chats" className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>Chats</Link>
+              <div className="flex items-center gap-2">
+                <MessageCircleCheck className="h-4 w-4 shrink-0 text-white" />
+                <Link href="/client/chats" className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>Chats</Link>
+              </div>
+              <div className="flex items-center gap-2">
+                <Receipt className="h-4 w-4 shrink-0 text-white" />
               <Link href="/client/bills" className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>My Bills</Link>
+              </div>
             </>
           )}
 
@@ -197,14 +218,17 @@ export default function Navbar() {
 
           {isAuthenticated && (
             <>
+            <div className="flex items-center gap-2">
+              <CircleUser className="h-4 w-4 shrink-0 text-white" />
               <Link
-                href={isClient ? '/client/profile' : '/advocate/profile'}
+                href="/client/profile"
                 className={mobileLinkClass}
                 style={{ fontFamily: 'Georgia, serif' }}
                 onClick={() => setMenuOpen(false)}
               >
                 My Profile
               </Link>
+              </div>
               <div className="mt-auto border-t border-white/15 pt-6">
                 <LogoutButton
                   className="w-full rounded-none px-0 py-0 text-left text-sm font-semibold hover:text-gray-200"
