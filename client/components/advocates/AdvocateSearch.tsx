@@ -31,11 +31,21 @@ const COUNTIES = [
   'Kakamega',
 ];
 
-export default function AdvocateSearch() {
+interface AdvocateSearchProps {
+  initialCategory?: string;
+}
+
+export default function AdvocateSearch({
+  initialCategory = '',
+}: AdvocateSearchProps) {
   const [search, setSearch] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState(initialCategory);
   const [county, setCounty] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
+
+  useEffect(() => {
+    setCategory(initialCategory);
+  }, [initialCategory]);
 
   useEffect(() => {
     const timer = setTimeout(() => {

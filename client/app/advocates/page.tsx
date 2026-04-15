@@ -2,7 +2,18 @@ import AdvocateSearch from '@/components/advocates/AdvocateSearch';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 
-export default function AdvocateListingPage() {
+interface AdvocateListingPageProps {
+  searchParams?: Promise<{
+    category?: string;
+  }>;
+}
+
+export default async function AdvocateListingPage({
+  searchParams,
+}: AdvocateListingPageProps) {
+  const params = await searchParams;
+  const initialCategory = params?.category?.trim() ?? '';
+
   return (
     <>
     <Navbar />
@@ -13,7 +24,7 @@ export default function AdvocateListingPage() {
         >
           Advocate Listing
         </h1>
-        <AdvocateSearch />
+        <AdvocateSearch initialCategory={initialCategory} />
       </main>
       <Footer />
     </>

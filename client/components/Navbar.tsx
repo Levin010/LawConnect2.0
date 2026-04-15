@@ -6,12 +6,7 @@ import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import LogoutButton from '@/components/login/LogoutButton';
-import { CircleUser, FileUser, LayoutDashboard, Mails, MessageCircleCheck, Receipt, Scale } from 'lucide-react';
-
-const clientCasesLinks = [
-  { label: 'My Cases', href: '/client/cases' },
-  { label: 'Sent Requests', href: '/client/requests' },
-];
+import { CircleUser, FileUser, Home, LayoutDashboard, LogIn, Mails, MessageCircleCheck, Receipt, Scale, UserPlus } from 'lucide-react';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -45,6 +40,8 @@ export default function Navbar() {
   const dropdownItemClass = 'block px-5 py-3 text-sm text-white hover:bg-white/10 transition-colors';
   const mobileLinkClass = `${navLinkClass} block`;
   const mobileSectionLabelClass = 'text-white text-xs font-semibold uppercase tracking-wider';
+  const desktopLinkClass = `${navLinkClass} flex items-center gap-2`;
+  const desktopDropdownItemClass = `${dropdownItemClass} flex items-center gap-2`;
 
   return (
     <>
@@ -62,13 +59,22 @@ export default function Navbar() {
         <nav className="hidden md:flex items-center gap-6">
           {/* Shared links */}
           {isClient && (
-            <Link href="/client/dashboard" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }}>Dashboard</Link>
+            <Link href="/client/dashboard" className={desktopLinkClass} style={{ fontFamily: 'Georgia, serif' }}>
+              <LayoutDashboard className="h-4 w-4 shrink-0" />
+              <span>Dashboard</span>
+            </Link>
           )}
           {!isClient && !isAuthenticated && (
-            <Link href="/" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }}>Home</Link>
+            <Link href="/" className={desktopLinkClass} style={{ fontFamily: 'Georgia, serif' }}>
+              <Home className="h-4 w-4 shrink-0" />
+              <span>Home</span>
+            </Link>
           )}
 
-          <Link href="/advocates" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }}>Advocate Listing</Link>
+          <Link href="/advocates" className={desktopLinkClass} style={{ fontFamily: 'Georgia, serif' }}>
+            <FileUser className="h-4 w-4 shrink-0" />
+            <span>Advocate Listing</span>
+          </Link>
 
           {/* Client-only links */}
           {isClient && (
@@ -86,25 +92,40 @@ export default function Navbar() {
                 </button>
                 {casesOpen && (
                   <div className="absolute top-full left-0 mt-2 w-48 rounded-xl shadow-xl overflow-hidden border border-white/10" style={{ backgroundColor: '#8B0000' }}>
-                    {clientCasesLinks.map((link) => (
-                      <Link key={link.label} href={link.href} className={dropdownItemClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setCasesOpen(false)}>
-                        {link.label}
-                      </Link>
-                    ))}
+                    <Link href="/client/cases" className={desktopDropdownItemClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setCasesOpen(false)}>
+                      <Scale className="h-4 w-4 shrink-0" />
+                      <span>My Cases</span>
+                    </Link>
+                    <Link href="/client/requests" className={desktopDropdownItemClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setCasesOpen(false)}>
+                      <Mails className="h-4 w-4 shrink-0" />
+                      <span>Sent Requests</span>
+                    </Link>
                   </div>
                 )}
               </div>
 
-              <Link href="/client/appointments" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }}>Appointments</Link>
-              <Link href="/client/bills" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }}>My Bills</Link>
+              <Link href="/client/chats" className={desktopLinkClass} style={{ fontFamily: 'Georgia, serif' }}>
+                <MessageCircleCheck className="h-4 w-4 shrink-0" />
+                <span>Chats</span>
+              </Link>
+              <Link href="/client/bills" className={desktopLinkClass} style={{ fontFamily: 'Georgia, serif' }}>
+                <Receipt className="h-4 w-4 shrink-0" />
+                <span>My Bills</span>
+              </Link>
             </>
           )}
 
           {/* Guest-only links */}
           {!isAuthenticated && (
             <>
-              <Link href="/signup" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }}>Sign Up</Link>
-              <Link href="/login" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }}>Login</Link>
+              <Link href="/signup" className={desktopLinkClass} style={{ fontFamily: 'Georgia, serif' }}>
+                <UserPlus className="h-4 w-4 shrink-0" />
+                <span>Sign Up</span>
+              </Link>
+              <Link href="/login" className={desktopLinkClass} style={{ fontFamily: 'Georgia, serif' }}>
+                <LogIn className="h-4 w-4 shrink-0" />
+                <span>Login</span>
+              </Link>
             </>
           )}
 
@@ -123,14 +144,18 @@ export default function Navbar() {
                 <div className="absolute top-full right-0 mt-2 w-44 rounded-xl shadow-xl overflow-hidden border border-white/10" style={{ backgroundColor: '#8B0000' }}>
                   <Link
                     href={isClient ? '/client/profile' : '/advocate/profile'}
-                    className={dropdownItemClass}
+                    className={desktopDropdownItemClass}
                     style={{ fontFamily: 'Georgia, serif' }}
                     onClick={() => setAccountOpen(false)}
                   >
-                    My Profile
+                    <CircleUser className="h-4 w-4 shrink-0" />
+                    <span>My Profile</span>
                   </Link>
-                  <div className="px-3 py-2">
-                    <LogoutButton />
+                  <div className="px-5 pb-1 text-sm text-white hover:bg-white/10 transition-colors">
+                    <LogoutButton
+                      className="w-full rounded-none px-0 py-0 text-left text-sm font-semibold hover:text-gray-200"
+                      showIcon
+                    />
                   </div>
                 </div>
               )}
@@ -172,7 +197,10 @@ export default function Navbar() {
             </div>
           )}
           {!isAuthenticated && (
-            <Link href="/" className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>Home</Link>
+            <div className="flex items-center gap-2">
+              <Home className="h-4 w-4 shrink-0 text-white" />
+              <Link href="/" className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>Home</Link>
+            </div>
           )}
           <div className="flex items-center gap-2">
             <FileUser className="h-4 w-4 shrink-0 text-white" />
@@ -211,8 +239,14 @@ export default function Navbar() {
 
           {!isAuthenticated && (
             <>
-              <Link href="/signup" className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>Sign Up</Link>
-              <Link href="/login" className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>Login</Link>
+              <div className="flex items-center gap-2">
+                <UserPlus className="h-4 w-4 shrink-0 text-white" />
+                <Link href="/signup" className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>Sign Up</Link>
+              </div>
+              <div className="flex items-center gap-2">
+                <LogIn className="h-4 w-4 shrink-0 text-white" />
+                <Link href="/login" className={mobileLinkClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setMenuOpen(false)}>Login</Link>
+              </div>
             </>
           )}
 

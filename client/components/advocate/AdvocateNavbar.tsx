@@ -8,12 +8,6 @@ import { RootState } from '@/store';
 import LogoutButton from '@/components/login/LogoutButton';
 import { BriefcaseBusiness, CircleUser, LayoutDashboard, Mails, MessageCircleCheck, Receipt, Scale } from 'lucide-react';
 
-const casesLinks = [
-  { label: 'My Cases', href: '/advocate/cases' },
-  { label: 'Received Requests', href: '/advocate/requests' },
-  { label: 'New Case', href: '/advocate/cases/new' },
-];
-
 export default function AdvocateNavbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [casesOpen, setCasesOpen] = useState(false);
@@ -50,6 +44,8 @@ export default function AdvocateNavbar() {
   const dropdownItemClass = 'block px-5 py-3 text-sm text-white hover:bg-white/10 transition-colors';
   const mobileLinkClass = `${navLinkClass} block`;
   const mobileSectionLabelClass = 'text-white text-xs font-semibold uppercase tracking-wider';
+  const desktopLinkClass = `${navLinkClass} flex items-center gap-2`;
+  const desktopDropdownItemClass = `${dropdownItemClass} flex items-center gap-2`;
 
   return (
     <>
@@ -73,8 +69,9 @@ export default function AdvocateNavbar() {
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-6">
-          <Link href="/advocate/dashboard" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }}>
-            Dashboard
+          <Link href="/advocate/dashboard" className={desktopLinkClass} style={{ fontFamily: 'Georgia, serif' }}>
+            <LayoutDashboard className="h-4 w-4 shrink-0" />
+            <span>Dashboard</span>
           </Link>
 
           {/* Cases dropdown */}
@@ -91,21 +88,30 @@ export default function AdvocateNavbar() {
             </button>
             {casesOpen && (
               <div className="absolute top-full left-0 mt-2 w-48 rounded-xl shadow-xl overflow-hidden border border-white/10" style={{ backgroundColor: '#8B0000' }}>
-                {casesLinks.map((link) => (
-                  <Link key={link.label} href={link.href} className={dropdownItemClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setCasesOpen(false)}>
-                    {link.label}
-                  </Link>
-                ))}
+                <Link href="/advocate/cases" className={desktopDropdownItemClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setCasesOpen(false)}>
+                  <Scale className="h-4 w-4 shrink-0" />
+                  <span>My Cases</span>
+                </Link>
+                <Link href="/advocate/requests" className={desktopDropdownItemClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setCasesOpen(false)}>
+                  <Mails className="h-4 w-4 shrink-0" />
+                  <span>Received Requests</span>
+                </Link>
+                <Link href="/advocate/cases/new" className={desktopDropdownItemClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setCasesOpen(false)}>
+                  <BriefcaseBusiness className="h-4 w-4 shrink-0" />
+                  <span>New Case</span>
+                </Link>
               </div>
             )}
           </div>
 
-          <Link href="/advocate/appointments" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }}>
-            Appointments
+          <Link href="/advocate/chats" className={desktopLinkClass} style={{ fontFamily: 'Georgia, serif' }}>
+            <MessageCircleCheck className="h-4 w-4 shrink-0" />
+            <span>Chats</span>
           </Link>
 
-          <Link href="/advocate/bills" className={navLinkClass} style={{ fontFamily: 'Georgia, serif' }}>
-            Client Bills
+          <Link href="/advocate/bills" className={desktopLinkClass} style={{ fontFamily: 'Georgia, serif' }}>
+            <Receipt className="h-4 w-4 shrink-0" />
+            <span>Client Bills</span>
           </Link>
 
           {/* Account avatar dropdown */}
@@ -120,11 +126,15 @@ export default function AdvocateNavbar() {
             </button>
             {accountOpen && (
               <div className="absolute top-full right-0 mt-2 w-44 rounded-xl shadow-xl overflow-hidden border border-white/10" style={{ backgroundColor: '#8B0000' }}>
-                <Link href="/advocate/profile" className={dropdownItemClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setAccountOpen(false)}>
-                  My Profile
+                <Link href="/advocate/profile" className={desktopDropdownItemClass} style={{ fontFamily: 'Georgia, serif' }} onClick={() => setAccountOpen(false)}>
+                  <CircleUser className="h-4 w-4 shrink-0" />
+                  <span>My Profile</span>
                 </Link>
-                <div className="px-3 py-2">
-                  <LogoutButton />
+                <div className="px-5 pb-1 text-sm text-white hover:bg-white/10 transition-colors">
+                  <LogoutButton
+                    className="w-full rounded-none px-0 py-0 text-left text-sm font-semibold hover:text-gray-200"
+                    showIcon
+                  />
                 </div>
               </div>
             )}

@@ -31,7 +31,7 @@ export default function LogoutButton({ className = '', showIcon = false }: Logou
     <button
       onClick={handleLogout}
       disabled={isLoading}
-      className={`px-0 py-2 rounded-lg text-white font-semibold transition-colors disabled:opacity-60 ${className}`.trim()}
+      className={`px-0 pb-2 pt-1 rounded-lg text-white font-semibold transition-colors disabled:opacity-60 ${className}`.trim()}
       style={{ backgroundColor: '#8B0000', fontFamily: 'Georgia, serif' }}
     >
       <span className="flex items-center gap-2">
