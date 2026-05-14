@@ -3,10 +3,12 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Send } from 'lucide-react';
-import { useGetConversationQuery, useMarkAsReadMutation, ChatMessageDto } from '@/store/api/chatApi';
+import { chatApi, useGetConversationQuery, useMarkAsReadMutation, ChatMessageDto } from '@/store/api/chatApi';
 import { useChat, ReadReceiptDto } from '@/hooks/useChat';
 import { v4 as uuidv4 } from 'uuid';
 import { Hourglass, Check, CheckCheck } from 'lucide-react';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/store';
 
 interface Props {
   myUserId: string;
@@ -22,6 +24,7 @@ type UIMessage = ChatMessageDto & {
 
 export default function ChatView({ myUserId, myUsername, otherUserId, otherUserName, otherUserRole = 'User', }: Props) {
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
   const { data: history, isLoading } = useGetConversationQuery(otherUserId);
   const [markAsRead] = useMarkAsReadMutation();
   const [messages, setMessages] = useState<UIMessage[]>([]);
@@ -32,16 +35,6 @@ export default function ChatView({ myUserId, myUsername, otherUserId, otherUserN
   useEffect(() => {
     if (history) setMessages(history);
   }, [history]);
-
-  // useEffect(() => {
-  //   if (messages.length > 0) {
-  //     const conversationId = messages[0].conversationId;
-  //     if (markedRef.current !== conversationId) {
-  //       markedRef.current = conversationId;
-  //       markAsRead(conversationId);
-  //     }
-  //   }
-  // }, [messages]);
 
   useEffect(() => {
     const conversationId = messages.find((m) => m.conversationId)?.conversationId;
@@ -102,17 +95,8 @@ export default function ChatView({ myUserId, myUsername, otherUserId, otherUserN
 
   const handleMessage = useCallback((msg: ChatMessageDto) => {
     onMessageRef.current(msg);
-  }, []);
-  
-  // const handleReadReceipt = useCallback((receipt: ReadReceiptDto) => {
-  //   setMessages((prev) =>
-  //     prev.map((m) =>
-  //       m.conversationId === receipt.conversationId && m.senderId === myUserId
-  //         ? { ...m, read: true }
-  //         : m
-  //     )
-  //   );
-  // }, [myUserId]);
+    dispatch(chatApi.util.invalidateTags(['Chat']));
+  }, [dispatch]);
 
   const handleReadReceipt = useCallback((receipt: ReadReceiptDto) => {
 
@@ -144,21 +128,19 @@ export default function ChatView({ myUserId, myUsername, otherUserId, otherUserN
     const tempMessage: UIMessage = {
         messageId: tempId,
         senderId: myUserId,
-        senderName: '', // optional
+        senderName: '',
         senderUsername: myUsername,
         receiverId: otherUserId,
-        receiverUsername: '', // optional
+        receiverUsername: '',
         content: trimmed,
-        conversationId: '', // will be replaced
+        conversationId: '',
         sentAt: new Date().toISOString(),
         read: false,
         status: 'sending',
     };
 
-    // Optimistic UI update
     setMessages((prev) => [...prev, tempMessage]);
 
-    // Send to backend
     sendMessage(otherUserId, trimmed);
 
     setInput('');

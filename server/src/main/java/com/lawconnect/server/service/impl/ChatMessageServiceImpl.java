@@ -1,15 +1,21 @@
 package com.lawconnect.server.service.impl;
 
+import com.lawconnect.server.dto.ChatInboxItemDto;
 import com.lawconnect.server.dto.ChatMessageDto;
+import com.lawconnect.server.model.AdvocateProfile;
 import com.lawconnect.server.model.ChatMessage;
+import com.lawconnect.server.model.ClientProfile;
 import com.lawconnect.server.model.User;
+import com.lawconnect.server.repository.AdvocateProfileRepository;
 import com.lawconnect.server.repository.ChatMessageRepository;
+import com.lawconnect.server.repository.ClientProfileRepository;
 import com.lawconnect.server.repository.UserRepository;
 import com.lawconnect.server.service.ChatMessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +25,8 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
     private final ChatMessageRepository chatMessageRepository;
     private final UserRepository userRepository;
+    private final AdvocateProfileRepository advocateProfileRepository;
+    private final ClientProfileRepository clientProfileRepository;
 
     @Override
     public ChatMessageDto saveMessage(String senderUsername, ChatMessageDto dto) {
@@ -70,9 +78,38 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         List<String> conversationIds = chatMessageRepository.findConversationIdsByUserId(userId);
         List<ChatMessageDto> inbox = new ArrayList<>();
         for (String convId : conversationIds) {
-            ChatMessage latest = chatMessageRepository.findLatestMessageInConversation(convId);
+            ChatMessage latest = chatMessageRepository.findTopByConversationIdOrderBySentAtDesc(convId);
             if (latest != null) inbox.add(toDto(latest));
         }
+        return inbox;
+    }
+
+    @Override
+    public List<ChatInboxItemDto> getInboxItems(String userId) {
+        List<String> conversationIds = chatMessageRepository.findConversationIdsByUserId(userId);
+        List<ChatInboxItemDto> inbox = new ArrayList<>();
+
+        for (String convId : conversationIds) {
+            ChatMessage latest = chatMessageRepository.findTopByConversationIdOrderBySentAtDesc(convId);
+            if (latest == null) continue;
+
+            User otherUser = latest.getSender().getId().equals(userId)
+                    ? latest.getReceiver()
+                    : latest.getSender();
+
+            ChatInboxItemDto item = new ChatInboxItemDto();
+            item.setConversationId(convId);
+            item.setOtherUserId(otherUser.getId());
+            item.setOtherUserName(buildFullName(otherUser));
+            item.setOtherUserRole(otherUser.getRole().name());
+            item.setOtherUserProfilePicture(getProfilePicture(otherUser));
+            item.setLastMessage(toDto(latest));
+            item.setLastMessageAt(latest.getSentAt());
+            item.setUnreadCount(chatMessageRepository.countUnreadByConversationIdAndReceiverId(convId, userId));
+            inbox.add(item);
+        }
+
+        inbox.sort(Comparator.comparing(ChatInboxItemDto::getLastMessageAt).reversed());
         return inbox;
     }
 
@@ -106,5 +143,21 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         dto.setSentAt(m.getSentAt());
         dto.setRead(m.isRead());
         return dto;
+    }
+
+    private String buildFullName(User user) {
+        return (user.getFirstName() + " " + user.getLastName()).trim();
+    }
+
+    private String getProfilePicture(User user) {
+        return switch (user.getRole()) {
+            case ADVOCATE -> advocateProfileRepository.findByUser(user)
+                    .map(AdvocateProfile::getProfilePicture)
+                    .orElse(null);
+            case CLIENT -> clientProfileRepository.findByUser(user)
+                    .map(ClientProfile::getProfilePicture)
+                    .orElse(null);
+            default -> null;
+        };
     }
 }

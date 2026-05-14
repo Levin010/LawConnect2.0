@@ -1,5 +1,6 @@
 package com.lawconnect.server.controller;
 
+import com.lawconnect.server.dto.ChatInboxItemDto;
 import com.lawconnect.server.dto.ChatMessageDto;
 import com.lawconnect.server.dto.ReadReceiptDto;
 import com.lawconnect.server.repository.UserRepository;
@@ -105,8 +106,8 @@ public class ChatController {
      * GET /chat/inbox
      */
     @GetMapping("/chat/inbox")
-    public List<ChatMessageDto> getInbox(@AuthenticationPrincipal UserDetails userDetails) {
-        return chatMessageService.getInbox(extractUserId(userDetails));
+    public List<ChatInboxItemDto> getInbox(@AuthenticationPrincipal UserDetails userDetails) {
+        return chatMessageService.getInboxItems(extractUserId(userDetails));
     }
 
     /**

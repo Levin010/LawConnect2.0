@@ -18,6 +18,17 @@ export interface ChatMessageDto {
   conversationId: string;
 }
 
+export interface ChatInboxItemDto {
+  conversationId: string;
+  otherUserId: string;
+  otherUserName: string;
+  otherUserRole: string;
+  otherUserProfilePicture: string | null;
+  lastMessage: ChatMessageDto;
+  unreadCount: number;
+  lastMessageAt: string;
+}
+
 export const chatApi = baseApi.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
@@ -25,7 +36,7 @@ export const chatApi = baseApi.injectEndpoints({
       query: (otherUserId) => `/chat/conversation/${otherUserId}`,
       providesTags: ['Chat'],
     }),
-    getInbox: builder.query<ChatMessageDto[], void>({
+    getInbox: builder.query<ChatInboxItemDto[], void>({
       query: () => '/chat/inbox',
       providesTags: ['Chat'],
     }),
