@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
+const apiUrl = process.env.SERVER_API_URL ?? process.env.NEXT_PUBLIC_API_URL;
+
 const nextConfig: NextConfig = {
+  output: 'standalone',
   images: {
     domains: [],
     remotePatterns: [
@@ -14,7 +17,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL}/:path*`,
+        destination: `${apiUrl}/:path*`,
       },
     ];
   },

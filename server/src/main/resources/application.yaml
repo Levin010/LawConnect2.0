@@ -51,6 +51,8 @@ server:
 
 app:
   frontend-url: ${FRONTEND_URL:http://localhost:3000}
+  cors:
+    allowed-origins: ${APP_CORS_ALLOWED_ORIGINS:http://localhost:3000,https://law-connect2-0.vercel.app}
   mail:
     from: ${MAIL_FROM:levdev1010@gmail.com}
 

@@ -1,0 +1,10 @@
+.env
+.env.*
+.next
+node_modules
+coverage
+build
+out
+*.log
+next-env.d.ts
+
