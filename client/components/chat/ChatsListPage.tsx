@@ -77,7 +77,7 @@ function ChatRow({ chat, myUserId, basePath }: { chat: ChatInboxItemDto; myUserI
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <h2
-              className={`truncate text-sm ${hasUnreadIncoming ? 'font-bold text-gray-950' : 'font-semibold text-gray-800'}`}
+              className={`truncate text-sm lg:text-base ${hasUnreadIncoming ? 'font-bold text-gray-950' : 'font-semibold text-gray-800'}`}
               style={{ fontFamily: 'Georgia, serif' }}
             >
               {chat.otherUserName}
@@ -85,7 +85,7 @@ function ChatRow({ chat, myUserId, basePath }: { chat: ChatInboxItemDto; myUserI
           </div>
           <div className="shrink-0">
             <span
-              className={`text-xs ${hasUnreadIncoming ? 'font-bold' : 'text-gray-400'}`}
+              className={`text-xs lg:text-sm ${hasUnreadIncoming ? 'font-bold' : 'text-gray-400'}`}
               style={{ color: hasUnreadIncoming ? '#8B0000' : undefined, fontFamily: 'Georgia, serif' }}
             >
               {formatConversationDate(chat.lastMessageAt)}
@@ -95,18 +95,18 @@ function ChatRow({ chat, myUserId, basePath }: { chat: ChatInboxItemDto; myUserI
         <div className="mt-2 flex min-w-0 items-center gap-1.5">
           {lastMessageIsMine && (
             <span className="shrink-0 text-gray-400">
-              {lastMessage.read ? <CheckCheck className="h-3.5 w-3.5 text-blue-400" /> : <Check className="h-3.5 w-3.5" />}
+              {lastMessage.read ? <CheckCheck className="h-3.5 w-3.5 lg:h-4 lg:w-4 text-blue-400" /> : <Check className="h-3.5 w-3.5 lg:h-4 lg:w-4" />}
             </span>
           )}
           <p
-            className={`min-w-0 flex-1 truncate text-sm ${hasUnreadIncoming ? 'font-bold text-gray-900' : 'text-gray-500'}`}
+            className={`min-w-0 flex-1 truncate text-xs lg:text-sm ${hasUnreadIncoming ? 'font-bold text-gray-900' : 'text-gray-500'}`}
             style={{ fontFamily: 'Georgia, serif' }}
           >
             {lastMessage.content}
           </p>
           {hasUnreadIncoming && (
             <span
-              className="ml-auto flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full px-1.5 text-xs font-bold text-white"
+              className="ml-auto flex h-5 min-w-5 lg:h-5.5 lg:min-w-5.5 shrink-0 items-center justify-center rounded-full px-1.5 text-xs font-bold text-white"
               style={{ backgroundColor: '#8B0000', fontFamily: 'Georgia, serif' }}
             >
               {chat.unreadCount}
