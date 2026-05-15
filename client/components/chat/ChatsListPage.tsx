@@ -85,7 +85,7 @@ function ChatRow({ chat, myUserId, basePath }: { chat: ChatInboxItemDto; myUserI
           </div>
           <div className="shrink-0">
             <span
-              className={`text-xs lg:text-sm ${hasUnreadIncoming ? 'font-bold' : 'text-gray-400'}`}
+              className={`text-[13px] lg:text-sm ${hasUnreadIncoming ? 'font-bold' : 'text-gray-400'}`}
               style={{ color: hasUnreadIncoming ? '#8B0000' : undefined, fontFamily: 'Georgia, serif' }}
             >
               {formatConversationDate(chat.lastMessageAt)}
@@ -99,7 +99,7 @@ function ChatRow({ chat, myUserId, basePath }: { chat: ChatInboxItemDto; myUserI
             </span>
           )}
           <p
-            className={`min-w-0 flex-1 truncate text-xs lg:text-sm ${hasUnreadIncoming ? 'font-bold text-gray-900' : 'text-gray-500'}`}
+            className={`min-w-0 flex-1 truncate text-[13px] lg:text-sm ${hasUnreadIncoming ? 'font-bold text-gray-900' : 'text-gray-500'}`}
             style={{ fontFamily: 'Georgia, serif' }}
           >
             {lastMessage.content}
